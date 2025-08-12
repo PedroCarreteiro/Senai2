@@ -6,7 +6,7 @@ for (let i = 0; i < cats.length; i++){
     if(i != cats.length-1){
         info += cats[i] + ", ";
     } else {
-        info += cats[i]
+        info += "and " + cats[i] + "."
     }
     console.log("contador: "+i);
     console.log("gatos: "+cats[i])
