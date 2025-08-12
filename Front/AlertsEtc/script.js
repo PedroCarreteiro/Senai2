@@ -18,4 +18,12 @@
 
 //// 4
 //confirm("Está preparado para o segundo semestre de desenvolvimento de sistemas?")
-//alert(`${}`)
+
+
+
+let numero = 1.0
+let n2 = 1
+
+teste = numero === n2
+
+alert(teste)
