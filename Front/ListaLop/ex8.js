@@ -12,4 +12,4 @@ for(let i = 0; i <= lista.length; i++){
     }
 }
 
-alert(`Temos ${negativos} números negativos na lista`)
+alert(`Temos ${negativos} números negativos na lista`);
