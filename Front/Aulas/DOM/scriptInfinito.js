@@ -11,11 +11,9 @@ let infinito = function (){
 //     setTimeout(infinito, 1000);
 // }
 
+const intervalId = setInterval(infinito, 100);
 
-let i = 0;
-
-while (i < 10){
-    i++;
-    infinito();
-    setTimeout(1000);
-}
+setTimeout(() => {
+    clearInterval(intervalId);
+    alert("Aacabou")
+}, 100000);
