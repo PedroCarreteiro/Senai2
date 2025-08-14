@@ -1,5 +1,5 @@
 <script setup>
-
+import TesteComponent from './components/TesteComponent.vue'
 </script>
 
 <template>
@@ -9,7 +9,7 @@
   </header>
 
   <main>
-    
+    <TesteComponent mensagem="Hello"/>
   </main>
 </template>
 
