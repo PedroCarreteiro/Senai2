@@ -1,5 +1,5 @@
 <script setup>
-import TesteComponent from './components/TesteComponent.vue'
+import TesteComponentGrande from './components/TesteComponentGrande.vue';
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import TesteComponent from './components/TesteComponent.vue'
   </header>
 
   <main>
-    <TesteComponent mensagem="Hello"/>
+    <TesteComponentGrande/>
   </main>
 </template>
 
