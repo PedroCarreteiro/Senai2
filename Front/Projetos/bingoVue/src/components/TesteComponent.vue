@@ -16,7 +16,7 @@ defineProps({
 <style scoped>
 
 h1{
-    font-size: 10rem;
+    font-size: 5rem;
     color: with;
 }
 
@@ -24,6 +24,7 @@ h1{
     display: flex;
     flex-direction: line;
     align-items: center;
+    border: 2px solid red;
 }
 
 </style>
