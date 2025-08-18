@@ -59,3 +59,27 @@ button:hover {
   background: #2a9d8f;
   color: white;
 }
+
+/* 
+Com grid
+
+/* .numeros {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 8px;
+  max-width: 500px;
+}
+
+.numeros div {
+  background: #e9ecef;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.numeros .sorteado {
+  background: #2a9d8f;
+  color: white;
+} */ 

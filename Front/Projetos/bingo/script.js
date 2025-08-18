@@ -62,6 +62,7 @@ function iniciar() {
   }
 
   // Monta o HTML com uma <div> para cada número e injeta tudo de uma vez
+  //Map para executar a cada elemento do array e o join para juntar todas essas mini divs em um comando só (programação 2)
   // - cada número recebe um id único "numX" (ex: num23) para podermos marcar depois
   document.getElementById("listaNumeros").innerHTML =
     numeros.map(num => `<div id="num${num}">${num}</div>`).join("");
