@@ -38,17 +38,29 @@ class Lobo(Tamagoshi):
     def treinar(self):
         if self.forca < 100:
             self.forca += 10
+            self.fome += 10
             print(
                 f"Força aumentou em 10\n"
-                f"Fome diminuiu em 10\n"
+                f"Fome aumentou em 10\n"
             )
             if self.forca > 100:
                 self.forca = self.forca - (self.forca-100)
         else:
             print("Já está com a força máxima!")
 
-    
-    
+    def estudar(self):
+        if self.tedio > 0:
+            self.tedio -= 10
+            print(
+                f"Tedio diminuiu em 10\n"
+            )
+            if self.tedio < 0:
+                self.tedio = self.tedio + (self.tedio-100)
+        else:
+            print("Já está com sem tedio!")
+        
+
+
 class Urso(Tamagoshi):
     def __init__(self, nome, armadura):
         super().__init__(nome)
@@ -72,6 +84,38 @@ class Urso(Tamagoshi):
         self.idade += 0.1
         self.tedio += 5
         self.fome += 10
+
+    def regenerarVida(self):
+        if self.vida < 100:
+            self.vida += 10
+            print(f"Vida regenerada em 10")
+            if self.vida > 100:
+                self.vida = self.vida - (self.vida-100)
+        else:
+            print("Já está com a vida máxima!")
+
+    def treinar(self):
+        if self.forca < 100:
+            self.forca += 20
+            self.fome += 20
+            print(
+                f"Força aumentou em 20\n"
+                f"Fome aumentou em 20\n"
+            )
+            if self.forca > 100:
+                self.forca = self.forca - (self.forca-100)
+        else:
+            print("Já está com a força máxima!")
+
+    def estudar(self):
+        if self.tedio > 0:
+            self.tedio -= 10
+            print(
+                f"Tedio diminuiu em 10\n"
+            )
+            if self.tedio < 0:
+                self.tedio = self.tedio + (self.tedio-100)
+        else:
+            print("Já está com sem tedio!")
     
-    def medirArmadura(self):
-        return (self.fome * 2)
+    
