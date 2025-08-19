@@ -58,55 +58,59 @@ function iniciar() {
 
   document.getElementById("numeroAtual").textContent = "--";
 
+  listaFull = numeros.join()
+  listaFull = listaFull.split(",")
+
 }
 
 function sortearNumero() {
 
-  //numerosB.length === 0 || numerosI.length === 0 || numerosN.length === 0 || numerosG.length === 0 || numerosO.length === 0
 
-
-  
-
-  const indice = Math.floor(Math.random() * numeros.length);
-  const lista = numeros[indice];
-  
-
-
-
-  const numeroIndice = Math.floor(Math.random() * lista.length);
-  const numero = lista[numeroIndice];
-
-  
-  if(sorteados.includes(numero)){
+  if(listaFull.length === 0){
     alert("Todos os números já foram sorteados!");
     return;
   }
 
+  console.log(listaFull)
+  
+  const indice = Math.floor(Math.random() * listaFull.length);
+  const numero = listaFull[indice];  
+
   sorteados.push(numero);
-
-  console.log(lista)
-  console.log(numero)
-  
-
-  lista.splice(numeroIndice, 1);
-  console.log(lista)
-  console.log(sorteados)
+  listaFull.splice(indice, 1);
 
   
 
-  if(indice == 0){
+  // if(indice == 0){
+  //   document.getElementById("numeroAtual").textContent = "B"+numero;
+  // }
+  // else if(indice == 1){
+  //   document.getElementById("numeroAtual").textContent = "I"+numero;
+  // }
+  // else if(indice == 2){
+  //   document.getElementById("numeroAtual").textContent = "N"+numero;
+  // }
+  // else if(indice == 3){
+  //   document.getElementById("numeroAtual").textContent = "G"+numero;
+  // }
+  // else if(indice == 4){
+  //   document.getElementById("numeroAtual").textContent = "O"+numero;
+  // }
+
+
+  if(numero > 1 && numero <= 15){
     document.getElementById("numeroAtual").textContent = "B"+numero;
   }
-  else if(indice == 1){
+  else if (numero > 16 && numero <= 30){
     document.getElementById("numeroAtual").textContent = "I"+numero;
   }
-  else if(indice == 2){
+  else if(numero > 31 && numero <= 45){
     document.getElementById("numeroAtual").textContent = "N"+numero;
   }
-  else if(indice == 3){
+  else if(numero > 46 && numero <= 60){
     document.getElementById("numeroAtual").textContent = "G"+numero;
   }
-  else if(indice == 4){
+  else if(numero > 61 && numero <= 75){
     document.getElementById("numeroAtual").textContent = "O"+numero;
   }
 
