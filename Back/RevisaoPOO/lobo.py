@@ -43,11 +43,11 @@ class Lobo(Tamagoshi):
         else:
             print("Já está com a força máxima!")
 
-    def estudar(self):
+    def utilizarIgni(self):
         if self.tedio > 0:
             self.tedio -= 5
             print(
-                f"Tedio diminuiu em 10\n"
+                f"Tedio diminuiu em 5\n"
             )
             if self.tedio < 0:
                 self.tedio = self.tedio + (self.tedio-100)

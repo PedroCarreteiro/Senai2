@@ -1,13 +1,12 @@
 from tamagoshi import Tamagoshi
 
-class Urso(Tamagoshi):
-    def __init__(self, nome, armadura):
+class Grifo(Tamagoshi):
+    def __init__(self, nome, inteligencia):
         super().__init__(nome)
-        self.armadura = armadura
+        self.inteligencia = inteligencia
 
     def alimentar(self, quantidade):
-        if (quantidade >= 0) and (quantidade <= 100):
-            self.fome -= self.fome * (quantidade/120)
+        return super().alimentar(quantidade)
 
     def brincar(self, quantidade):
         return super().brincar(quantidade)
@@ -20,37 +19,35 @@ class Urso(Tamagoshi):
     
     def tempoPassando(self):
         self.vida()
-        self.idade += 0.1
-        self.tedio += 5
-        self.fome += 10
+        self.idade += 0.01
+        self.tedio += 3
+        self.fome += 5
 
-    def dormir(self):
+    def beberPocao(self):
         if self.vida < 100:
-            self.vida += 20
+            self.vida += 10
             print(f"Vida regenerada em 10")
             if self.vida > 100:
                 self.vida = self.vida - (self.vida-100)
         else:
             print("Já está com a vida máxima!")
 
-    def treinar(self):
-        if self.forca < 100:
-            self.forca += 20
-            self.fome += 20
-            print(
-                f"Força aumentou em 20\n"
-                f"Fome aumentou em 20\n"
-            )
-            if self.forca > 100:
-                self.forca = self.forca - (self.forca-100)
-        else:
-            print("Já está com a força máxima!")
-
     def estudar(self):
+        if self.inteligencia < 100:
+            self.inteligencia += 20
+            print(
+                f"Inteligência aumentou em 20\n"
+            )
+            if self.inteligencia > 100:
+                self.inteligencia = self.inteligencia - (self.inteligencia-100)
+        else:
+            print("Já está com a inteligência máxima!")
+
+    def utilizarAxii(self):
         if self.tedio > 0:
             self.tedio -= 10
             print(
-                f"Tedio diminuiu em 20\n"
+                f"Tedio diminuiu em 10\n"
             )
             if self.tedio < 0:
                 self.tedio = self.tedio + (self.tedio-100)
