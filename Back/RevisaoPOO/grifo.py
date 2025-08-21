@@ -5,11 +5,11 @@ class Grifo(Tamagoshi):
         super().__init__(nome)
         self.inteligencia = inteligencia
 
-    def alimentar(self, quantidade):
-        return super().alimentar(quantidade)
+    def alimentar(self):
+        return super().alimentar()
 
-    def brincar(self, quantidade):
-        return super().brincar(quantidade)
+    def brincar(self):
+        return super().brincar()
 
     def getHumor(self):
         return super().getHumor()
@@ -20,17 +20,20 @@ class Grifo(Tamagoshi):
     def tempoPassando(self):
         self.vida()
         self.idade += 0.01
-        self.tedio += 3
-        self.fome += 5
+        self.tedio += 1
+        self.fome += 2
+
+    def getStatus(self):
+        return super().getStatus()
 
     def beberPocao(self):
-        if self.vida < 100:
-            self.vida += 10
-            print(f"Vida regenerada em 10")
-            if self.vida > 100:
-                self.vida = self.vida - (self.vida-100)
+        if self.saude < 100:
+            self.saude += 10
+            print(f"saude regenerada em 10")
+            if self.saude > 100:
+                self.saude = 100
         else:
-            print("Já está com a vida máxima!")
+            print("Já está com a saude máxima!")
 
     def estudar(self):
         if self.inteligencia < 100:
@@ -39,7 +42,7 @@ class Grifo(Tamagoshi):
                 f"Inteligência aumentou em 20\n"
             )
             if self.inteligencia > 100:
-                self.inteligencia = self.inteligencia - (self.inteligencia-100)
+                self.inteligencia = 100
         else:
             print("Já está com a inteligência máxima!")
 
@@ -50,6 +53,6 @@ class Grifo(Tamagoshi):
                 f"Tedio diminuiu em 10\n"
             )
             if self.tedio < 0:
-                self.tedio = self.tedio + (self.tedio-100)
+                self.tedio = 0
         else:
             print("Já está sem tedio!")

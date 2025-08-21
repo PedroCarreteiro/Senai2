@@ -5,12 +5,11 @@ class Urso(Tamagoshi):
         super().__init__(nome)
         self.armadura = armadura
 
-    def alimentar(self, quantidade):
-        if (quantidade >= 0) and (quantidade <= 100):
-            self.fome -= self.fome * (quantidade/120)
-
-    def brincar(self, quantidade):
-        return super().brincar(quantidade)
+    def alimentar(self):
+        return super().alimentar()
+        
+    def brincar(self):
+        return super().brincar()
 
     def getHumor(self):
         return super().getHumor()
@@ -21,17 +20,20 @@ class Urso(Tamagoshi):
     def tempoPassando(self):
         self.vida()
         self.idade += 0.1
-        self.tedio += 5
-        self.fome += 10
+        self.tedio += 2
+        self.fome += 3
+
+    def getStatus(self):
+        return super().getStatus()
 
     def dormir(self):
-        if self.vida < 100:
-            self.vida += 20
-            print(f"Vida regenerada em 20")
-            if self.vida > 100:
-                self.vida = self.vida - (self.vida-100)
+        if self.saude < 100:
+            self.saude += 20
+            print(f"saude regenerada em 20")
+            if self.saude > 100:
+                self.saude = 100
         else:
-            print("Já está com a vida máxima!")
+            print("Já está com a saude máxima!")
 
     def treinarArmadura(self):
         if self.armadura < 100:
@@ -42,7 +44,7 @@ class Urso(Tamagoshi):
                 f"Fome aumentou em 20\n"
             )
             if self.armadura > 100:
-                self.armadura = self.armadura - (self.armadura-100)
+                self.armadura = 100
         else:
             print("Já está com a armadura máxima!")
 
@@ -53,6 +55,6 @@ class Urso(Tamagoshi):
                 f"Armadura aumentou em 5\n"
             )
             if self.armadura > 100:
-                self.armadura = self.armadura - (self.armadura-100)
+                self.armadura = 100
         else:
             print("Já está com a armadura máxima!")

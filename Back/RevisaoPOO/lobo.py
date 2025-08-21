@@ -4,13 +4,13 @@ class Lobo(Tamagoshi):
     def __init__(self, nome, forca):
         super().__init__(nome)
         self.forca = forca
+        
 
-    def alimentar(self, quantidade):
-        return super().alimentar(quantidade)
+    def alimentar(self):
+        return super().alimentar()
 
-    def brincar(self, quantidade):
-        if (quantidade >= 0) and (quantidade <= 100):
-            self.tedio -= self.tedio * (quantidade/50)
+    def brincar(self):
+        return super().brincar()
 
     def getHumor(self):
         return super().getHumor()
@@ -21,14 +21,17 @@ class Lobo(Tamagoshi):
     def tempoPassando(self):
         return super().tempoPassando()
     
+    def getStatus(self):
+        return super().getStatus()
+    
     def beberPocao(self):
-        if self.vida < 100:
-            self.vida += 10
-            print(f"Vida regenerada em 10")
-            if self.vida > 100:
-                self.vida = self.vida - (self.vida-100)
+        if self.saude < 100:
+            self.saude += 10
+            print(f"saude regenerada em 10")
+            if self.saude > 100:
+                self.saude = 100
         else:
-            print("Já está com a vida máxima!")
+            print("Já está com a saude máxima!")
 
     def treinarForca(self):
         if self.forca < 100:
@@ -39,17 +42,15 @@ class Lobo(Tamagoshi):
                 f"Fome aumentou em 10\n"
             )
             if self.forca > 100:
-                self.forca = self.forca - (self.forca-100)
+                self.forca = 100
         else:
             print("Já está com a força máxima!")
 
     def utilizarIgni(self):
         if self.tedio > 0:
-            self.tedio -= 5
-            print(
-                f"Tedio diminuiu em 5\n"
-            )
+            self.tedio -= 10
+            print(f"Tedio diminuiu em 10")
             if self.tedio < 0:
-                self.tedio = self.tedio + (self.tedio-100)
+                self.tedio = 0
         else:
-            print("Já está sem tedio!")
+            print("Já está zero de tedio")
