@@ -49,6 +49,9 @@ def main():
     while True:
 
        if classe == Lobo:
+            
+            tamagoshi.tempoPassando()
+
             acao = input(f"\nDigite sua ação: \n"
                             f"[1] - Alimentar\n" 
                             f"[2] - Brincar\n" 
@@ -79,11 +82,13 @@ def main():
 
             tamagoshi.getStatus()
 
-            #tamagoshi.getHumor()
-            tamagoshi.tempoPassando()            
+            tamagoshi.getHumor()           
        
        
        elif classe == Urso:
+           
+           tamagoshi.tempoPassando()
+
            acao = input(f"\nDigite sua ação: \n"
                             f"[1] - Alimentar\n" 
                             f"[2] - Brincar\n" 
@@ -114,11 +119,14 @@ def main():
            
            tamagoshi.getStatus()
 
-           #tamagoshi.getHumor()
-           tamagoshi.tempoPassando()
+           tamagoshi.getHumor()
+           
            
 
        elif classe == Grifo:
+           
+           tamagoshi.tempoPassando()
+
            acao = input(f"\nDigite sua ação: \n"
                             f"[1] - Alimentar\n" 
                             f"[2] - Brincar\n" 
@@ -149,8 +157,7 @@ def main():
 
            tamagoshi.getStatus()
 
-           #tamagoshi.getHumor()
-           tamagoshi.tempoPassando()
+           tamagoshi.getHumor()
 
 
        if (tamagoshi.saude == 0 or tamagoshi.saude < 0):

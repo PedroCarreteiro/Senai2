@@ -34,8 +34,8 @@ class Tamagoshi():
             print("Já está zero de tedio")
 
     def getHumor(self):
-        print(((self.fome * self.tedio)/2))
-        return ((self.fome * self.tedio)/2)
+        print(f"O humor do(a) {self.nome} é -",((self.fome + self.tedio)/2))
+        return ((self.fome + self.tedio)/2)
         
     
     def vida(self):
