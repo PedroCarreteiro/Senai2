@@ -79,7 +79,7 @@ def main():
 
             tamagoshi.getStatus()
 
-            tamagoshi.getHumor()
+            #tamagoshi.getHumor()
             tamagoshi.tempoPassando()            
        
        
@@ -114,7 +114,7 @@ def main():
            
            tamagoshi.getStatus()
 
-           tamagoshi.getHumor()
+           #tamagoshi.getHumor()
            tamagoshi.tempoPassando()
            
 
@@ -149,7 +149,7 @@ def main():
 
            tamagoshi.getStatus()
 
-           tamagoshi.getHumor()
+           #tamagoshi.getHumor()
            tamagoshi.tempoPassando()
 
 
