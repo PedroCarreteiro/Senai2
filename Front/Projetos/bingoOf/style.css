@@ -1,0 +1,79 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f2f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.numero-sorteado {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #2a9d8f;
+  margin: 20px 0;
+}
+
+button {
+  background: #264653;
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  margin: 10px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #2a9d8f;
+}
+
+.numeros {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 8px;
+  max-width: 500px;
+  align-items: center;
+  justify-content: center;
+}
+
+.numeros article {
+  width: 40px;       
+  height: 40px;
+  background: #e9ecef;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.numeros .sorteado {
+  background: #2a9d8f;
+  color: white;
+}
+
+.bingo{
+  display: flex;
+  flex-direction: row;
+  width: 50rem;
+  height: 21rem;
+}
+
+.coluna{
+  display: flex;
+  flex-direction: column;
+  width: 10rem;
+  height: 21rem;
+  align-items: center;
+}
+
