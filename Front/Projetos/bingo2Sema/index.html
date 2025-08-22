@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bingo</title>
+  <script src=".\script.js" defer></script>
+  <link rel="stylesheet" href="style.css"/>
+   
+<body>
+  <h1>Bingo</h1>
+  <article class="numero-sorteado" id="numeroAtual">--</article>
+  <button onclick="sortearNumero()">Sortear Número</button>
+  <button onclick="reiniciar()">Reiniciar</button>
+
+  <div class="bingo">
+
+    <section class="coluna" id="listaColuna">
+      <h1>B</h1>
+      <div class="numeros" id="listaNumerosB"></div>
+    </section>
+
+    <section class="coluna" id="listaColuna">
+      <h1>I</h1>
+      <div class="numeros" id="listaNumerosI"></div>
+    </section>
+
+    <section class="coluna" id="listaColuna">
+      <h1>N</h1>
+      <div class="numeros" id="listaNumerosN"></div>
+    </section>
+
+    <section class="coluna" id="listaColuna">
+      <h1>G</h1>
+      <div class="numeros" id="listaNumerosG"></div>
+    </section>
+
+    <section class="coluna" id="listaColuna">
+      <h1>O</h1>
+      <div class="numeros" id="listaNumerosO"></div>
+    </section>
+  </div>
+
+</body>
+</html>
