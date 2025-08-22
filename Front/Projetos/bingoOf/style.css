@@ -16,6 +16,8 @@ h1 {
   margin-bottom: 20px;
 }
 
+
+
 .numero-sorteado {
   font-size: 4rem;
   font-weight: bold;
@@ -69,6 +71,8 @@ button:hover {
   flex-direction: row;
   width: 50rem;
   height: 21rem;
+  background-color: rgba(38, 70, 83, 0.623);
+  box-shadow: 6px 6px 8px rgb(39, 37, 37);
 }
 
 .coluna{
