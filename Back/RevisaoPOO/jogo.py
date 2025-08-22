@@ -7,7 +7,7 @@ from grifo import Grifo
 import time
 
 def passarTempo():
-    print("Carregando...")
+    print("\nCarregando...\n")
     time.sleep(3)
 
 passarTempo()
@@ -30,6 +30,7 @@ def main():
         if escolha_classe == "4":
             print("Você escolheu uma classe aleatória, logo aparecerá qual é a sua classe.")
             escolha_classe = str(random.randint(1,3))
+            passarTempo()
 
         if escolha_classe == "1":
             print("Sua classe é LOBO")
