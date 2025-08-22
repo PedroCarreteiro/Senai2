@@ -29,30 +29,30 @@ class Grifo(Tamagoshi):
     def beberPocao(self):
         if self.saude < 100:
             self.saude += 10
-            print(f"saude regenerada em 10")
+            print(f"Saude regenerada!\n")
             if self.saude > 100:
                 self.saude = 100
         else:
-            print("Já está com a saude máxima!")
+            print("Já está com a saude máxima!\n")
 
     def estudar(self):
         if self.inteligencia < 100:
             self.inteligencia += 20
             print(
-                f"Inteligência aumentou em 20\n"
+                f"Inteligência aumentou!\n"
             )
             if self.inteligencia > 100:
                 self.inteligencia = 100
         else:
-            print("Já está com a inteligência máxima!")
+            print("Já está com a inteligência máxima!\n")
 
     def utilizarAxii(self):
         if self.tedio > 0:
             self.tedio -= 10
             print(
-                f"Tedio diminuiu em 10\n"
+                f"Tedio diminuiu!\n"
             )
             if self.tedio < 0:
                 self.tedio = 0
         else:
-            print("Já está sem tedio!")
+            print("Já está sem tedio!\n")

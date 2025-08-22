@@ -10,7 +10,7 @@ class Tamagoshi():
     def alimentar(self):
         if self.fome > 0:
             self.fome -= 5
-            print(f"Fome diminuiu em 5")
+            print(f"{self.nome} se alimentou!")
             if self.fome < 0:
                 self.fome = 0
         else:
@@ -19,7 +19,7 @@ class Tamagoshi():
     def brincar(self):
         if self.tedio > 0:
             self.tedio -= 5
-            print(f"Tedio diminuiu em 5")
+            print(f"{self.nome} perdeu tédio!")
             if self.tedio < 0:
                 self.tedio = 0
         else:

@@ -29,32 +29,32 @@ class Urso(Tamagoshi):
     def dormir(self):
         if self.saude < 100:
             self.saude += 20
-            print(f"saude regenerada em 20")
+            print(f"Saude regenerada!\n")
             if self.saude > 100:
                 self.saude = 100
         else:
-            print("Já está com a saude máxima!")
+            print("Já está com a saude máxima!\n")
 
     def treinarArmadura(self):
         if self.armadura < 100:
             self.armadura += 20
             self.fome += 20
             print(
-                f"Armadura aumentou em 20\n"
-                f"Fome aumentou em 20\n"
+                f"Armadura aumentou!\n"
+                f"Fome aumentou!\n"
             )
             if self.armadura > 100:
                 self.armadura = 100
         else:
-            print("Já está com a armadura máxima!")
+            print("Já está com a armadura máxima!\n")
 
     def utilizarQuen(self):
         if self.armadura < 100:
             self.armadura += 5
             print(
-                f"Armadura aumentou em 5\n"
+                f"Armadura aumentou!\n"
             )
             if self.armadura > 100:
                 self.armadura = 100
         else:
-            print("Já está com a armadura máxima!")
+            print("Já está com a armadura máxima!\n")
