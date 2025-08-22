@@ -98,19 +98,19 @@ function sortearNumero() {
   // }
 
 
-  if(numero > 1 && numero <= 15){
+  if(numero >= 1 && numero <= 15){
     document.getElementById("numeroAtual").textContent = "B"+numero;
   }
-  else if (numero > 16 && numero <= 30){
+  else if (numero >= 16 && numero <= 30){
     document.getElementById("numeroAtual").textContent = "I"+numero;
   }
-  else if(numero > 31 && numero <= 45){
+  else if(numero >= 31 && numero <= 45){
     document.getElementById("numeroAtual").textContent = "N"+numero;
   }
-  else if(numero > 46 && numero <= 60){
+  else if(numero >= 46 && numero <= 60){
     document.getElementById("numeroAtual").textContent = "G"+numero;
   }
-  else if(numero > 61 && numero <= 75){
+  else if(numero >= 61 && numero <= 75){
     document.getElementById("numeroAtual").textContent = "O"+numero;
   }
 
