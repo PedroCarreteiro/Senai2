@@ -4,11 +4,18 @@ from tamagoshi import Tamagoshi
 from lobo import Lobo
 from urso import Urso
 from grifo import Grifo
+import time
 
+def passarTempo():
+    print("Carregando...")
+    time.sleep(3)
+
+passarTempo()
 
 
 def main():
     print(" ==== Bem vindo ao SUPER TAMAGOSHI 40000 ==== ")
+    passarTempo()
     escolha = True
     while escolha == True:
         escolha_classe = input(f"Qual classe a classe do seu Tamagoshi: \n"
@@ -42,11 +49,13 @@ def main():
         else:
             print("Atenção! O digito não corresponde a nenhuma classe!")
 
+    passarTempo()
     if escolha_classe != "5":
         tamagoshi_nome = input("\n\nDigite o nome do seu Tamagoshi: ")
         tamagoshi = classe(tamagoshi_nome, 0)
-        print(f"O nome do deu tamagoshi é: {tamagoshi.nome}")
+        print(f"O nome do seu tamagoshi é: {tamagoshi.nome}")
 
+        passarTempo()
         while True:
 
             if classe == Lobo:
@@ -62,6 +71,8 @@ def main():
                                     f"[6] - Sair\n"
                                 )
                     
+                    passarTempo()
+
                     if acao == "1":
                         tamagoshi.alimentar()
 
@@ -99,6 +110,8 @@ def main():
                                     f"[6] - Sair\n"
                                 )
                 
+                passarTempo()
+
                 if acao == "1":
                         tamagoshi.alimentar()
 
@@ -136,6 +149,8 @@ def main():
                                     f"[5] - Utilizar Axii\n"
                                     f"[6] - Sair\n"
                                 )
+                
+                passarTempo()
                 
                 if acao == "1":
                         tamagoshi.alimentar()

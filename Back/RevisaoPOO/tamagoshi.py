@@ -6,14 +6,6 @@ class Tamagoshi():
         self.idade = 0
         self.tedio = 0
 
-    # def alimentar(self, quantidade):
-    #     if (quantidade >= 0) and (quantidade <= 100):
-    #         self.fome -= self.fome * (quantidade/100)
-
-    # def brincar(self, quantidade):
-    #     if (quantidade >= 0) and (quantidade <= 100):
-    #         self.tedio -= self.tedio * (quantidade/100)
-
 
     def alimentar(self):
         if self.fome > 0:
