@@ -1,3 +1,4 @@
+/*Estilo do corpo da aplicação*/
 body {
   font-family: Arial, sans-serif;
   display: flex;
@@ -11,11 +12,13 @@ body {
   background-size: cover;
 }
 
+/*Estilo dos h1 sem classe*/
 h1 {
   color: #ffffff;
   margin-bottom: 20px;
 }
 
+/*Estilo do número sorteado*/
 .numero-sorteado {
   font-size: 4rem;
   font-weight: bold;
@@ -23,6 +26,7 @@ h1 {
   margin: 20px 0;
 }
 
+/*Estilo dos botões*/
 button {
   background: #264653;
   color: white;
@@ -34,10 +38,12 @@ button {
   transition: 0.3s;
 }
 
+/*Estilo do hover do botão*/
 button:hover {
   background: #2a9d8f;
 }
 
+/*Estilo da lista de números*/
 .numeros {
   margin-top: 20px;
   display: flex;
@@ -48,6 +54,7 @@ button:hover {
   justify-content: center;
 }
 
+/*Estilo do número específico*/
 .numeros article {
   width: 40px;       
   height: 40px;
@@ -59,11 +66,7 @@ button:hover {
   font-weight: bold;
 }
 
-.numeros .sorteado {
-  background: #2a9d8f;
-  color: white;
-}
-
+/*Estilo da tabela do bingo*/
 .bingo{
   display: flex;
   flex-direction: row;
@@ -73,6 +76,7 @@ button:hover {
   box-shadow: 6px 6px 8px rgb(39, 37, 37);
 }
 
+/*Estilo da coluna de letra*/
 .coluna{
   display: flex;
   flex-direction: column;
