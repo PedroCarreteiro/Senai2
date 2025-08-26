@@ -1,0 +1,87 @@
+/*Estilo do corpo da aplicação*/
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  background-image: url(rooster.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/*Estilo dos h1 sem classe*/
+h1 {
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+/*Estilo do número sorteado*/
+.numero-sorteado {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 20px 0;
+}
+
+/*Estilo dos botões*/
+button {
+  background: #ff0000;
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  margin: 10px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  transition: 0.3s;
+}
+
+/*Estilo do hover do botão*/
+button:hover {
+  background: #ffffff;
+  color: #ff0000;
+}
+
+/*Estilo da lista de números*/
+.numeros {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 8px;
+  max-width: 500px;
+  align-items: center;
+  justify-content: center;
+}
+
+/*Estilo do número específico*/
+.numeros article {
+  width: 40px;       
+  height: 40px;
+  background: #e9ecef;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/*Estilo da tabela do bingo*/
+.bingo{
+  display: flex;
+  flex-direction: row;
+  width: 50rem;
+  height: 21rem;
+  background-color: rgba(167, 34, 34, 0.623);
+}
+
+/*Estilo da coluna de letra*/
+.coluna{
+  display: flex;
+  flex-direction: column;
+  width: 10rem;
+  height: 21rem;
+  align-items: center;
+}
+

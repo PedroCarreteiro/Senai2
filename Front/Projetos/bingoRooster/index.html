@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo</title>
+    <script src=".\script.js" defer></script>
+    <link rel="stylesheet" href="style.css"/>
+  </head>
+    
+  <!-- Conteúdo principal -->
+  <body>
+    <!-- Título -->
+    <h1>Leviathan da Sorte</h1>
+    <!--Número sorteado-->
+    <h1 class="numero-sorteado" id="numeroAtual">--</h1>
+    <!--Botão de sorteio-->
+    <button id="sortearNumero">Sortear Número</button>
+    <!--Botão de reiniciar-->
+    <button id="reiniciarJogo">Reiniciar</button>
+
+    <!--Conteúdo do sorteio do bingo, dividido por colunas de acordo com as letras BINGO-->
+    <div class="bingo">
+
+      <!--Coluna da letra B-->
+      <section class="coluna" id="listaColuna">
+        <h1>B</h1>
+        <!--Números sorteados de acordo com a coluna da letra B-->
+        <div class="numeros" id="listaNumerosB"></div>
+      </section>
+
+      <!--Coluna da letra I-->
+      <section class="coluna" id="listaColuna">
+        <h1>I</h1>
+        <!--Números sorteados de acordo com a coluna da letra I-->
+        <div class="numeros" id="listaNumerosI"></div>
+      </section>
+
+      <!--Coluna da letra N-->
+      <section class="coluna" id="listaColuna">
+        <h1>N</h1>
+        <!--Números sorteados de acordo com a coluna da letra N-->
+        <div class="numeros" id="listaNumerosN"></div>
+      </section>
+
+      <!--Coluna da letra G-->
+      <section class="coluna" id="listaColuna">
+        <h1>G</h1>
+        <!--Números sorteados de acordo com a coluna da letra G-->
+        <div class="numeros" id="listaNumerosG"></div>
+      </section>
+
+      <!--Coluna da letra O-->
+      <section class="coluna" id="listaColuna">
+        <h1>O</h1>
+        <!--Números sorteados de acordo com a coluna da letra O-->
+        <div class="numeros" id="listaNumerosO"></div>
+      </section>
+
+    </div>
+
+  </body>
+</html>
