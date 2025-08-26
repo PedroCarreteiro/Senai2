@@ -17,9 +17,10 @@ let sorteadosG = [];
 let sorteadosO = [];
 let listaFull = [];
 
-//Função utilizada quando a página é carregada, recarregada ou quando o botão de reiniciar é acionado
+//Função ativada quando a página é carregada, recarregada ou quando o botão de reiniciar é acionado. 
+//Utilizada para iniciar/reiniciar o jogo
 function iniciar() {
-  //Deixar todas as litas vazias
+  //Deixar todas as listas vazias
   numerosB = [];
   numerosI = [];
   numerosN = [];
@@ -51,7 +52,7 @@ function iniciar() {
     numerosO.push(i);
   }
 
-  //Popular a lista de todos os números
+  //Popular a lista que contém as listas de números
   numeros.push(numerosB);
   numeros.push(numerosI);
   numeros.push(numerosN);
@@ -71,7 +72,7 @@ function iniciar() {
 
   document.getElementById("numeroAtual").textContent = "--";
 
-  //Fazer uma lista que contém a lista de todos os números
+  //Fazer uma lista que contém todos os números sem separação por letra BINGO
   listaFull = numeros.join()
   listaFull = listaFull.split(",")
 }
@@ -93,7 +94,7 @@ btnSortear.onclick = function() {
   sorteados.push(numero);
   listaFull.splice(indice, 1);
 
-  //Verificar em qual letra BINGO o número se adequa e adicionar esse número a lista de sorteados da letra correspondente tanto no JS como no HTML
+  //Verificar em qual letra BINGO o número se adequa e adicionar esse número a lista de sorteados da letra correspondente tanto no JS como na coluna correspondente no HTML
   //Além de imprimir o número sorteado junto com sua letra de acordo com a sua letra BINGO na seção de número sorteado
   if(numero >= 1 && numero <= 15){
     sorteadosB.push(numero)
@@ -132,5 +133,5 @@ btnReiniciar.onclick = function reiniciar() {
   iniciar();
 }
 
-//Iniciar a função iniciar no carregamento
+//Iniciar a função iniciar no carregamento da página
 iniciar();
