@@ -35,10 +35,16 @@ class MyHandle(SimpleHTTPRequestHandler):
     
     def do_GET(self):
         if self.path == "/login":
-            self.send_response(200)
-            self.send_header("Content-type", "text/html")
-            self.end_headers()
-            self.wfile.write(b"<html><body><h1>LOGIN DA FESTA DO CARLINHOS MAIA</h1></body></html>")
+            try:
+                with open(os.path.join(os.getcwd(), "login.html"), 'r') as login:
+                    content = login.read()
+                self.send_response(200)
+                self.send_header("Content-type", "text/html")
+                self.end_headers()
+                #self.wfile.write(b"<html><body><h1>LOGIN DA FESTA DO CARLINHOS MAIA</h1></body></html>")
+                self.wfile.write(content.encode('utf-8'))
+            except FileNotFoundError:
+                self.send_error(404, "File Not Found")
         else:
             super().do_GET()
 
