@@ -1,0 +1,14 @@
+/*Estilização do body das páginas*/
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/*Estilização de formulários*/
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}

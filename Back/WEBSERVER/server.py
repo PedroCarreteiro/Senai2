@@ -1,58 +1,98 @@
-# from http.server import SimpleHTTPRequestHandler, HTTPServer
-
-# #Definir a porta
-# port = 8000
-
-# #Definindo o gerenciamento/manipulador de requisições
-# handler = SimpleHTTPRequestHandler
-
-# #Criação de instancia de servidor
-# server = HTTPServer(("localhost",port), handler)
-
-# #imprimindo mensagem de ok
-# print(f"Server Runing in localhost:{port}")
-
-# server.serve_forever()
-
+#Importar bibliotecas
 import os
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 
+#Classe para o servidor
 class MyHandle(SimpleHTTPRequestHandler):
+    #Função para listar os caminhos do servidor
     def list_directory(self, path):
+        #Tentar executar o código abaixo, e caso ocorra um erro, a exceção é chamada
         try:
-            f = open(os.path.join(path, 'index.html'), 'r')
-
+            #Abrir o arquivo index.html
+            f = open(os.path.join(path, 'index.html'), encoding='utf-8')
+            #Enviar uma resposta de sucesso e definir dados do header
             self.send_response(200)
             self.send_header("Content-type", "text/html")
             self.end_headers()
-            #Especificando a codificação como utf-8
+            #Especificando a codificação do arquivo como utf-8 e escrever o conteúdo na tela
             self.wfile.write(f.read().encode('utf-8'))
             f.close()
+            #Retornar None para sinalizar que já utilizamos tudo o que precisávamos
             return None
+        #Caso ocorra algum erro, é chamada a exceção e ela passa para a próxima etapa
         except FileNotFoundError:
             pass
+        #Retornar o original não de certo o try para abrir o index, ele retorna os caminhos
         return super().list_directory(path)
     
+    #Função para realizar as operações do método GET a depender do caminho especificado
     def do_GET(self):
+        #Caso o caminho seja o de login, o bloco abaixo será executado e caso ocorra um erro, a exceção será chamada
         if self.path == "/login":
+            #Bloco de código para abrir o arquivo login.html e colocar seu conteúdo na var content
             try:
-                with open(os.path.join(os.getcwd(), "login.html"), 'r') as login:
+                with open(os.path.join(os.getcwd(), "login.html"), encoding='utf-8') as login:
                     content = login.read()
+                #Enviar resposta de sucesso e dados do header 
                 self.send_response(200)
                 self.send_header("Content-type", "text/html")
                 self.end_headers()
-                #self.wfile.write(b"<html><body><h1>LOGIN DA FESTA DO CARLINHOS MAIA</h1></body></html>")
+                #Escrever o conteúdo guardado no content na tela com a encodificação utf-8
                 self.wfile.write(content.encode('utf-8'))
+            #Exceção que envia um erro 404 caso o try não funcione corretamente
             except FileNotFoundError:
                 self.send_error(404, "File Not Found")
+
+
+        #Caso o caminho seja o de cadastro, o bloco abaixo será executado e caso ocorra um erro, a exceção será chamada
+        elif self.path == "/cadastro":
+            #Bloco de código para abrir o arquivo cadastro.html e colocar seu conteúdo na var content
+            try:
+                with open(os.path.join(os.getcwd(), "cadastro.html"), encoding='utf-8') as cadastro:
+                    content = cadastro.read()
+                #Enviar resposta de sucesso e dados do header 
+                self.send_response(200)
+                self.send_header("Content-type", "text/html")
+                self.end_headers()
+                #Escrever o conteúdo guardado no content na tela com a encodificação utf-8
+                self.wfile.write(content.encode('utf-8'))
+            #Exceção que envia um erro 404 caso o try não funcione corretamente
+            except FileNotFoundError:
+                self.send_error(404, "File Not Found")
+
+
+        #Caso o caminho seja o de listar filmes, o bloco abaixo será executado e caso ocorra um erro, a exceção será chamada
+        elif self.path == "/listar_filmes":
+            #Bloco de código para abrir o arquivo listar_filmes.html e colocar seu conteúdo na var content
+            try:
+                with open(os.path.join(os.getcwd(), "listar_filmes.html"), encoding='utf-8') as listar_filmes:
+                    content = listar_filmes.read()
+                #Enviar resposta de sucesso e dados do header
+                self.send_response(200)
+                self.send_header("Content-type", "text/html")
+                self.end_headers()
+                #Escrever o conteúdo guardado no content na tela com a encodificação utf-8
+                self.wfile.write(content.encode('utf-8'))
+            #Exceção que envia um erro 404 caso o try não funcione corretamente
+            except FileNotFoundError:
+                self.send_error(404, "File Not Found")
+
+        #Caso nenhum caminho tenha sido especificado, a superclasse será executada
         else:
             super().do_GET()
 
+
+#Função main para iniciar o servidor
 def main():
+    #Iniciar o servidor na porta 8000
     server_address = ('',8000)
+    #Objeto para indicar o endereço do server e que ele será utilizado com o MyHandle
     httpd = HTTPServer(server_address, MyHandle)
+    #Imprimir o caminho do servidor
     print("Server Running in http://localhost:8000")
+    #Ficar com o servidor iniciado indefinidamente
     httpd.serve_forever()
 
+#Chamar a função main
 main()
 
