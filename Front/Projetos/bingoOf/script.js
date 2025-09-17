@@ -1,3 +1,9 @@
+//Métrica de desenpenho 1 (tempo): https://cursos.alura.com.br/forum/topico-mensurar-tempo-de-resposta-42360
+//Métrica de manutenibilidade 2 - Modularidade(funções)
+//Métrica de manutenibilidade 3 - Acoplamento(funções independentes)
+//Métrica de manutenibilidade 5 - Código duplicado (Map)
+
+
 //Definir elementos
 let btnSortear = document.getElementById("sortearNumero")
 let btnReiniciar = document.getElementById("reiniciarJogo")
@@ -20,6 +26,11 @@ let listaFull = [];
 //Função ativada quando a página é carregada, recarregada ou quando o botão de reiniciar é acionado. 
 //Utilizada para iniciar/reiniciar o jogo
 function iniciar() {
+
+  //Métrica de desempenho 1
+  //Tempo de quando a funcção começou
+  const inicio = new Date();
+
   //Deixar todas as listas vazias
   numerosB = [];
   numerosI = [];
@@ -45,7 +56,7 @@ function iniciar() {
   for (let i = 31; i <= 45; i++) {
     numerosN.push(i);
   }
-  for (let i = 46; i <= 60; i++) {
+  for (let i = 46; i <= 60; i++) {  
     numerosG.push(i);
   }
   for (let i = 61; i <= 75; i++) {
@@ -75,10 +86,20 @@ function iniciar() {
   //Fazer uma lista que contém todos os números sem separação por letra BINGO
   listaFull = numeros.join()
   listaFull = listaFull.split(",")
+
+  //Métrica de desempenho 1
+  //Tempo final da execução da função
+  const fim = new Date();
+  const tempo = fim - inicio;
+  console.log(`Tempo de requisição para iniciar: ${tempo}`)
 }
 
 //Função para sortear um novo número
 btnSortear.onclick = function() {
+
+  //Métrica de desempenho 1
+  //Tempo de quando a funcção começou
+  const inicio = new Date();
 
   //Verificar se todos os números já foram sorteados, e se já foram, mandar um alert e já encerrar a função
   if(listaFull.length === 0){
@@ -126,6 +147,13 @@ btnSortear.onclick = function() {
     sorteadosO.map(num => `<article id="num${num}">${num}</article>`).join("");
     document.getElementById("numeroAtual").textContent = "O"+numero;
   }
+
+
+  //Métrica de desempenho 1
+  //Tempo final da execução da função
+  const fim = new Date();
+  const tempo = fim - inicio;
+  console.log(`Tempo de requisição para sortear: ${tempo}`)
 }
 
 //Chamar a função de iniciar caso o botão de reiniciar seja acionado
