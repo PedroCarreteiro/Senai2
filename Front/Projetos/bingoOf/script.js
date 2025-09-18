@@ -1,7 +1,9 @@
 //Métrica de desenpenho 1 (tempo): https://cursos.alura.com.br/forum/topico-mensurar-tempo-de-resposta-42360
-//Métrica de manutenibilidade 2 - Modularidade(funções)
-//Métrica de manutenibilidade 3 - Acoplamento(funções independentes)
-//Métrica de manutenibilidade 5 - Código duplicado (Map)
+//Métrica de manutenibilidade 1 - Modularidade(funções)
+//Métrica de manutenibilidade 2 - Acoplamento(funções independentes)
+//Métrica de manutenibilidade 3 - Coesão(Funções juntas)
+//Métrica de manutenibilidade 4 - Código duplicado(Map)
+//Métrica de usabilidade 1 - Satisfação do user(Testar) 
 
 
 //Definir elementos
