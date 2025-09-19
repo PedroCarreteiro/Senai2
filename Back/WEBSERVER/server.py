@@ -37,6 +37,23 @@ class MyHandle(SimpleHTTPRequestHandler):
             return "Usuário logado"
         else:
             return "Usuário não existe"
+        
+    def cadastrar_filme(self, nome_filme, atores, diretor, ano_lancamento, genero, produtora, sinopse):
+        try:
+            filme = {
+                "nome": nome_filme,
+                "atores": atores,
+                "diretor": diretor,
+                "ano_lancamento": ano_lancamento,
+                "genero": genero,
+                "produtora": produtora,
+                "sinopese": sinopse
+            }
+            filmes.update(filme)
+            return filmes
+        except:
+            return "Erro"
+            
 
     #Função para realizar as operações do método GET a depender do caminho especificado
     def do_GET(self):
@@ -124,6 +141,43 @@ class MyHandle(SimpleHTTPRequestHandler):
             self.end_headers()
             #Mensagem de sucesso (pode ser uma nova página)
             self.wfile.write(logou.encode("utf-8"))
+
+        elif self.path == '/send_filme':
+            content_length = int(self.headers['Content-length'])
+            #Ler o que veio
+            body = self.rfile.read(content_length).decode('utf-8')
+            #Pegar as informações do que veio
+            form_data = parse_qs(body)
+
+            nome_filme = form_data.get('nome_filme',[""])[0]
+            atores = form_data.get('atores',[""])[0]
+            diretor = form_data.get('diretor',[""])[0]
+            ano_lancamento = form_data.get('ano_lancamento',[""])[0]
+            genero = form_data.get('genero',[""])[0]
+            produtora = form_data.get('produtora',[""])[0]
+            sinopse = form_data.get('sinopse',[""])[0]
+
+
+            nome_filme = nome_filme.strip()
+            atores = atores.strip()
+            diretor = diretor.strip()
+            ano_lancamento = ano_lancamento.strip()
+            genero = genero.strip()
+            produtora = produtora.strip()
+            sinopse = sinopse.strip()
+
+            
+            cadastrar_filme = self.cadastrar_filme(nome_filme,atores,diretor,ano_lancamento,genero,produtora,sinopse)
+   
+ 
+            #Retornar sucesso
+            self.send_response(200)
+            #Retornar o header
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+            #Mensagem de sucesso (pode ser uma nova página)
+            self.wfile.write(cadastrar_filme.encode("utf-8"))
+
         #Padrão que sempre tem
         else:
             super(Handler, self).do_POST() 
@@ -142,4 +196,8 @@ def main():
 
 #Chamar a função main
 main()
+
+filmes = {
+
+}
 
