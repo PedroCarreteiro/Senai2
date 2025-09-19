@@ -35,6 +35,7 @@ class MyHandle(SimpleHTTPRequestHandler):
         return super().list_directory(path)
     
 
+    #Função para realizar a verificação de login, onde apenas identificará o user se o conteúdo dos campos estiver igual ao das vars
     def account_user(self, login, password):
 
         loga = "pedro@email.com"
@@ -89,10 +90,13 @@ class MyHandle(SimpleHTTPRequestHandler):
                 with open(os.path.join(os.getcwd(), "listar_filmes.html"), encoding='utf-8') as listar_filmes:
                     content = listar_filmes.read()
 
+                #Variável para armazenar o conteúdo html do filme
                 filmes_html = ""
 
+                #Se não tiver nenhum filme, uma mensagem de nenhum filme cadastrado aparecerá
                 if not filmes:
                     filmes_html = '<p>Nenhum filme cadastrado</p>'
+                #Caso tenha algum filme, criará o html do filme
                 else:
                     for filme_id, filme_data in filmes.items():
                         filmes_html += f"""
@@ -108,6 +112,7 @@ class MyHandle(SimpleHTTPRequestHandler):
                         </article>
                         """
 
+                #Dar replace no comentário do html pelo conteúdo do filme
                 final_content = content.replace('<!--FILMES-->',filmes_html)
 
                 #Enviar resposta de sucesso e dados do header
@@ -124,6 +129,7 @@ class MyHandle(SimpleHTTPRequestHandler):
         else:
             super().do_GET()
 
+    #Requisições POST
     def do_POST(self):
         if self.path == '/send_login':
             #O que veio do post do form
@@ -134,16 +140,19 @@ class MyHandle(SimpleHTTPRequestHandler):
             #Pegar as informações do que veio
             form_data = parse_qs(body)
 
+            #Armazenar o conteúdo dos inputs em vars
             login = form_data.get('nome_usuario',[""])[0]
             password = form_data.get('senha',[""])[0]
 
+            #Tratamento de espaços sobressalents
             login = login.strip()
             password = password.strip()
 
+            #Verificar se o usuario logou ou não através da função
             logou = self.account_user(login, password)
  
+            #Printar os dados dos inputs
             print("Data Form:")
-            #Pegar os dados dos inputs
             print("Usuario: ", form_data.get('nome_usuario', [""])[0])        
             print("Password: ", form_data.get('senha', [""])[0])    
  
@@ -155,18 +164,19 @@ class MyHandle(SimpleHTTPRequestHandler):
             #Mensagem de sucesso (pode ser uma nova página)
             self.wfile.write(logou.encode("utf-8"))
 
+        #Pegar o caminho que está no formulário de cadastro no html para cadastrar um filme
         elif self.path == '/send_filme':
-            # Acessa a variável global para modificar o contador
+            #Contador para os ids
             global id_counter
             
-            # Ler o tamanho do corpo da requisição
+            #Ler o tamanho do corpo da requisição
             content_length = int(self.headers['Content-length'])
-            # Ler o que veio
+            #Ler o que veio
             body = self.rfile.read(content_length).decode('utf-8')
-            # Pegar as informações do que veio
+            #Pegar as informações do que veio
             form_data = parse_qs(body)
 
-            # Extrair os dados do formulário
+            #Extrair os dados do formulário
             nome_filme = form_data.get('nome_filme', [""])[0].strip()
             atores = form_data.get('atores', [""])[0].strip()
             diretor = form_data.get('diretor', [""])[0].strip()
@@ -175,10 +185,12 @@ class MyHandle(SimpleHTTPRequestHandler):
             produtora = form_data.get('produtora', [""])[0].strip()
             sinopse = form_data.get('sinopse', [""])[0].strip()
             
+            #Aumentar o contador
             id_counter += 1
+            #Transferir o contador para str
             filme_id = str(id_counter)
             
-            # Criar o dicionário do filme
+            #Criar o dicionário do filme
             filme = {
                 "nome": nome_filme,
                 "atores": atores,
@@ -189,10 +201,10 @@ class MyHandle(SimpleHTTPRequestHandler):
                 "sinopse": sinopse
             }
 
-            # Adicionar o filme ao dicionário global com o ID único
+            #Adicionar o filme ao dicionário de filmes
             filmes[filme_id] = filme
             
-            # Preparar a resposta JSON
+            #Resposta JSON
             response = {
                 "message": "Filme cadastrado com sucesso!",
                 "filme_id": filme_id,
