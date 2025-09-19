@@ -1,6 +1,8 @@
 #Importar bibliotecas
+from logging import Handler
 import os
 from http.server import SimpleHTTPRequestHandler, HTTPServer
+from urllib.parse import parse_qs
 
 #Classe para o servidor
 class MyHandle(SimpleHTTPRequestHandler):
@@ -25,6 +27,17 @@ class MyHandle(SimpleHTTPRequestHandler):
         #Retornar o original não de certo o try para abrir o index, ele retorna os caminhos
         return super().list_directory(path)
     
+
+    def account_user(self, login, password):
+
+        loga = "pedro@email.com"
+        senha = "123456"
+
+        if login == loga and senha == password:
+            return "Usuário logado"
+        else:
+            return "Usuário não existe"
+
     #Função para realizar as operações do método GET a depender do caminho especificado
     def do_GET(self):
         #Caso o caminho seja o de login, o bloco abaixo será executado e caso ocorra um erro, a exceção será chamada
@@ -80,6 +93,40 @@ class MyHandle(SimpleHTTPRequestHandler):
         #Caso nenhum caminho tenha sido especificado, a superclasse será executada
         else:
             super().do_GET()
+
+    def do_POST(self):
+        if self.path == '/send_login':
+            #O que veio do post do form
+            #Ver o tamanho
+            content_length = int(self.headers['Content-length'])
+            #Ler o que veio
+            body = self.rfile.read(content_length).decode('utf-8')
+            #Pegar as informações do que veio
+            form_data = parse_qs(body)
+
+            login = form_data.get('nome_usuario',[""])[0]
+            password = form_data.get('senha',[""])[0]
+
+            login = login.strip()
+            password = password.strip()
+
+            logou = self.account_user(login, password)
+ 
+            print("Data Form:")
+            #Pegar os dados dos inputs
+            print("Usuario: ", form_data.get('nome_usuario', [""])[0])        
+            print("Password: ", form_data.get('senha', [""])[0])    
+ 
+            #Retornar sucesso
+            self.send_response(200)
+            #Retornar o header
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+            #Mensagem de sucesso (pode ser uma nova página)
+            self.wfile.write(logou.encode("utf-8"))
+        #Padrão que sempre tem
+        else:
+            super(Handler, self).do_POST() 
 
 
 #Função main para iniciar o servidor

@@ -11,12 +11,12 @@
             <!--Título da página-->
             <h1>Login do Site de Filmes</h1>
             <!--Formulário de login de usuário com opção de entrar no sistema e recuperação de senha-->
-            <form>
+            <form action="/send_login" method="post">
                 <label>Usuário</label>
-                <input placeholder="Usuário"/>
+                <input placeholder="Usuário" name="nome_usuario"/>
                 <label>Senha</label>
-                <input placeholder="Senha"/>
-                <button>Entrar</button>
+                <input placeholder="Senha" name="senha"/>
+                <button type="submit">Entrar</button>
                 <a href="#">Esqueci minha senha</a>
             </form>
         </main>
