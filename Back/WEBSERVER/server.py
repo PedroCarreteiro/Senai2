@@ -4,6 +4,10 @@ import os
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs
 
+
+filmes = {}
+
+
 #Classe para o servidor
 class MyHandle(SimpleHTTPRequestHandler):
     #Função para listar os caminhos do servidor
@@ -49,7 +53,7 @@ class MyHandle(SimpleHTTPRequestHandler):
                 "produtora": produtora,
                 "sinopese": sinopse
             }
-            filmes.update(filme)
+            filmes["filme"] = filme
             return filmes
         except:
             return "Erro"
@@ -157,7 +161,6 @@ class MyHandle(SimpleHTTPRequestHandler):
             produtora = form_data.get('produtora',[""])[0]
             sinopse = form_data.get('sinopse',[""])[0]
 
-
             nome_filme = nome_filme.strip()
             atores = atores.strip()
             diretor = diretor.strip()
@@ -165,10 +168,8 @@ class MyHandle(SimpleHTTPRequestHandler):
             genero = genero.strip()
             produtora = produtora.strip()
             sinopse = sinopse.strip()
-
             
             cadastrar_filme = self.cadastrar_filme(nome_filme,atores,diretor,ano_lancamento,genero,produtora,sinopse)
-   
  
             #Retornar sucesso
             self.send_response(200)
@@ -176,7 +177,7 @@ class MyHandle(SimpleHTTPRequestHandler):
             self.send_header("Content-type", "text/html")
             self.end_headers()
             #Mensagem de sucesso (pode ser uma nova página)
-            self.wfile.write(cadastrar_filme.encode("utf-8"))
+            self.wfile.write(cadastrar_filme)
 
         #Padrão que sempre tem
         else:
@@ -196,8 +197,4 @@ def main():
 
 #Chamar a função main
 main()
-
-filmes = {
-
-}
 
