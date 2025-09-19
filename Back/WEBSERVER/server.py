@@ -1,4 +1,5 @@
 #Importar bibliotecas
+import json
 from logging import Handler
 import os
 from http.server import SimpleHTTPRequestHandler, HTTPServer
@@ -6,6 +7,8 @@ from urllib.parse import parse_qs
 
 
 filmes = {}
+
+id_counter = 0
 
 
 #Classe para o servidor
@@ -41,22 +44,6 @@ class MyHandle(SimpleHTTPRequestHandler):
             return "Usuário logado"
         else:
             return "Usuário não existe"
-        
-    def cadastrar_filme(self, nome_filme, atores, diretor, ano_lancamento, genero, produtora, sinopse):
-        try:
-            filme = {
-                "nome": nome_filme,
-                "atores": atores,
-                "diretor": diretor,
-                "ano_lancamento": ano_lancamento,
-                "genero": genero,
-                "produtora": produtora,
-                "sinopese": sinopse
-            }
-            filmes["filme"] = filme
-            return filmes
-        except:
-            return "Erro"
             
 
     #Função para realizar as operações do método GET a depender do caminho especificado
@@ -101,12 +88,34 @@ class MyHandle(SimpleHTTPRequestHandler):
             try:
                 with open(os.path.join(os.getcwd(), "listar_filmes.html"), encoding='utf-8') as listar_filmes:
                     content = listar_filmes.read()
+
+                filmes_html = ""
+
+                if not filmes:
+                    filmes_html = '<p>Nenhum filme cadastrado</p>'
+                else:
+                    for filme_id, filme_data in filmes.items():
+                        filmes_html += f"""
+                        <article>
+                            <h3>{filme_data.get('nome')}</h3>
+                            <p><strong>Atores:</strong> {filme_data.get('atores')}</p>
+                            <p><strong>Diretor:</strong> {filme_data.get('diretor')}</p>
+                            <p><strong>Ano:</strong> {filme_data.get('ano_lancamento',)}</p>
+                            <p><strong>Genero:</strong> {filme_data.get('genero')}</p>
+                            <p><strong>Produtora:</strong> {filme_data.get('produtora')}</p>
+                            <p><strong>Sinopse:</strong> {filme_data.get('sinopse')}</p>
+                            <br>
+                        </article>
+                        """
+
+                final_content = content.replace('<!--FILMES-->',filmes_html)
+
                 #Enviar resposta de sucesso e dados do header
                 self.send_response(200)
                 self.send_header("Content-type", "text/html")
                 self.end_headers()
                 #Escrever o conteúdo guardado no content na tela com a encodificação utf-8
-                self.wfile.write(content.encode('utf-8'))
+                self.wfile.write(final_content.encode('utf-8'))
             #Exceção que envia um erro 404 caso o try não funcione corretamente
             except FileNotFoundError:
                 self.send_error(404, "File Not Found")
@@ -147,41 +156,58 @@ class MyHandle(SimpleHTTPRequestHandler):
             self.wfile.write(logou.encode("utf-8"))
 
         elif self.path == '/send_filme':
+            # Acessa a variável global para modificar o contador
+            global id_counter
+            
+            # Ler o tamanho do corpo da requisição
             content_length = int(self.headers['Content-length'])
-            #Ler o que veio
+            # Ler o que veio
             body = self.rfile.read(content_length).decode('utf-8')
-            #Pegar as informações do que veio
+            # Pegar as informações do que veio
             form_data = parse_qs(body)
 
-            nome_filme = form_data.get('nome_filme',[""])[0]
-            atores = form_data.get('atores',[""])[0]
-            diretor = form_data.get('diretor',[""])[0]
-            ano_lancamento = form_data.get('ano_lancamento',[""])[0]
-            genero = form_data.get('genero',[""])[0]
-            produtora = form_data.get('produtora',[""])[0]
-            sinopse = form_data.get('sinopse',[""])[0]
-
-            nome_filme = nome_filme.strip()
-            atores = atores.strip()
-            diretor = diretor.strip()
-            ano_lancamento = ano_lancamento.strip()
-            genero = genero.strip()
-            produtora = produtora.strip()
-            sinopse = sinopse.strip()
+            # Extrair os dados do formulário
+            nome_filme = form_data.get('nome_filme', [""])[0].strip()
+            atores = form_data.get('atores', [""])[0].strip()
+            diretor = form_data.get('diretor', [""])[0].strip()
+            ano_lancamento = form_data.get('ano_lancamento', [""])[0].strip()
+            genero = form_data.get('genero', [""])[0].strip()
+            produtora = form_data.get('produtora', [""])[0].strip()
+            sinopse = form_data.get('sinopse', [""])[0].strip()
             
-            cadastrar_filme = self.cadastrar_filme(nome_filme,atores,diretor,ano_lancamento,genero,produtora,sinopse)
- 
-            #Retornar sucesso
-            self.send_response(200)
-            #Retornar o header
-            self.send_header("Content-type", "text/html")
+            id_counter += 1
+            filme_id = str(id_counter)
+            
+            # Criar o dicionário do filme
+            filme = {
+                "nome": nome_filme,
+                "atores": atores,
+                "diretor": diretor,
+                "ano_lancamento": ano_lancamento,
+                "genero": genero,
+                "produtora": produtora,
+                "sinopse": sinopse
+            }
+
+            # Adicionar o filme ao dicionário global com o ID único
+            filmes[filme_id] = filme
+            
+            # Preparar a resposta JSON
+            response = {
+                "message": "Filme cadastrado com sucesso!",
+                "filme_id": filme_id,
+                "filme": filme
+            }
+            
+            # Enviar resposta de sucesso
+            self.send_response(201) # 201 Created
+            self.send_header("Content-type", "application/json")
             self.end_headers()
-            #Mensagem de sucesso (pode ser uma nova página)
-            self.wfile.write(cadastrar_filme)
+            self.wfile.write(json.dumps(response).encode("utf-8"))
 
         #Padrão que sempre tem
         else:
-            super(Handler, self).do_POST() 
+            super().do_POST() 
 
 
 #Função main para iniciar o servidor
