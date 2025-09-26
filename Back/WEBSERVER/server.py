@@ -2,7 +2,7 @@
 import json
 from logging import Handler
 import os
-from http.server import SimpleHTTPRequestHandler, HTTPServer
+from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs
 import json
 
@@ -13,7 +13,7 @@ id_counter = 0
 
 
 #Classe para o servidor
-class MyHandle(SimpleHTTPRequestHandler):
+class MyHandle(BaseHTTPRequestHandler):
     #Função para listar os caminhos do servidor
     def list_directory(self, path):
         #Tentar executar o código abaixo, e caso ocorra um erro, a exceção é chamada
@@ -296,6 +296,12 @@ class MyHandle(SimpleHTTPRequestHandler):
         else:
             super().do_POST()
 
+    # def do_DELETE(self, id):
+        
+    #     if self.path == '/delete_filmes/{id}':
+    #         arquivo = "dados.json"
+    #         try:
+    #             item_id_delete = int(arquivo[id])
 
 #Função main para iniciar o servidor
 def main():
