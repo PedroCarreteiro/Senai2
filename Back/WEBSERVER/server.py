@@ -4,6 +4,7 @@ from logging import Handler
 import os
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs
+import json
 
 
 filmes = {}
@@ -125,6 +126,26 @@ class MyHandle(SimpleHTTPRequestHandler):
             except FileNotFoundError:
                 self.send_error(404, "File Not Found")
 
+
+        #Caso o caminho seja o de listar filmes, o bloco abaixo será executado e caso ocorra um erro, a exceção será chamada
+        elif self.path == "/listar_filmes_mari":
+            arquivo = "dados.json"
+
+            if os.path.exists(arquivo):
+                with open(arquivo, encoding='utf-8') as listagem:
+                    try:
+                        filmes_mari = json.load(listagem)
+                    except json.JSONDecodeError:
+                        filmes_mari = []
+
+            else:
+                filmes_mari = []
+
+            self.send_response(200)
+            self.send_header("content-type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps(filmes_mari).encode("utf-8"))
+
         #Caso nenhum caminho tenha sido especificado, a superclasse será executada
         else:
             super().do_GET()
@@ -217,9 +238,63 @@ class MyHandle(SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps(response).encode("utf-8"))
 
+
+        elif self.path == '/send_filme_mari':
+            
+            #Ler o tamanho do corpo da requisição
+            content_length = int(self.headers['Content-length'])
+            #Ler o que veio
+            body = self.rfile.read(content_length).decode('utf-8')
+            #Pegar as informações do que veio
+            form_data = parse_qs(body)
+
+            #Extrair os dados do formulário
+            nome_filme = form_data.get('nome_filme', [""])[0].strip()
+            atores = form_data.get('atores', [""])[0].strip()
+            diretor = form_data.get('diretor', [""])[0].strip()
+            ano_lancamento = form_data.get('ano_lancamento', [""])[0].strip()
+            genero = form_data.get('genero', [""])[0].strip()
+            produtora = form_data.get('produtora', [""])[0].strip()
+            sinopse = form_data.get('sinopse', [""])[0].strip()
+            
+            #Criar o dicionário do filme
+            filme_mari = {
+                "nome": nome_filme,
+                "atores": atores,
+                "diretor": diretor,
+                "ano_lancamento": ano_lancamento,
+                "genero": genero,
+                "produtora": produtora,
+                "sinopse": sinopse
+            }
+
+            arquivo = "dados.json"
+
+            if os.path.exists(arquivo):
+                with open(arquivo, encoding="utf-8") as lista:
+                    try:
+                        filmes_mari = json.load(lista)
+                    except json.JSONDecodeError:
+                        filmes_mari = []
+                filmes_mari.append(filme_mari)
+            else:
+                filmes_mari = [filme_mari]
+
+
+            #Transformar a lista em json
+            with open(arquivo, "w", encoding="utf-8") as lista:
+                json.dump(filmes_mari, lista, indent=4, ensure_ascii=False)
+            
+            
+            # Enviar resposta de sucesso
+            self.send_response(201) # 201 Created
+            self.send_header("Content-type", "application/json")
+            self.end_headers()
+            self.wfile.write(str(filme_mari).encode("utf-8"))
+
         #Padrão que sempre tem
         else:
-            super().do_POST() 
+            super().do_POST()
 
 
 #Função main para iniciar o servidor
