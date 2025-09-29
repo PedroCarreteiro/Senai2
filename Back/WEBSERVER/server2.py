@@ -108,11 +108,11 @@ class MyHandle(BaseHTTPRequestHandler):
 
 
         #Caso o caminho seja o de listar filmes, o bloco abaixo será executado e caso ocorra um erro, a exceção será chamada
-        elif path == "/listar_filmes_teste":
-            #Bloco de código para abrir o arquivo listar_filmes_teste.html e colocar seu conteúdo na var content
+        elif path == "/listar_filmes":
+            #Bloco de código para abrir o arquivo listar_filmes.html e colocar seu conteúdo na var content
             try:
-                with open(os.path.join(os.getcwd(), "listar_filmes_teste.html"), encoding='utf-8') as listar_filmes_teste:
-                    content = listar_filmes_teste.read()
+                with open(os.path.join(os.getcwd(), "listar_filmes.html"), encoding='utf-8') as listar_filmes:
+                    content = listar_filmes.read()
 
                 #Variável para armazenar o conteúdo html do filme
                 filmes_html = ""
@@ -151,7 +151,7 @@ class MyHandle(BaseHTTPRequestHandler):
 
 
         #Caso o caminho seja o de listar filmes, o bloco abaixo será executado e caso ocorra um erro, a exceção será chamada
-        elif path == "/listar_filmes":
+        elif path == "/listar_filmes_mari":
             # << ALTERAÇÃO: Utiliza a função auxiliar para carregar o JSON
             filmes_mari = self._load_filmes_from_json()
 
