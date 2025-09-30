@@ -1,0 +1,9 @@
+import {somar, subtrair, multiplicar, dividir} from './calculos.js';
+
+console.log("=== Calculadora ===");
+
+console.log("5 + 3 =", somar(5, 3));
+console.log("10 - 4 =", subtrair(10, 4));
+console.log("6 x 7 =", multiplicar(6, 7));
+console.log("20 / 4 =", dividir(20, 4));
+console.log("10 / 0 =", dividir(10, 0));
