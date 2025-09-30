@@ -3,7 +3,7 @@ import json
 from logging import Handler
 import os
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from urllib.parse import parse_qs, urlparse # << ALTERAÇÃO: ADICIONADO 'urlparse'
+from urllib.parse import parse_qs, urlparse
 import json
 
 
@@ -11,15 +11,15 @@ filmes = {}
 
 id_counter = 0
 
-# << ALTERAÇÃO: VARIÁVEL GLOBAL PARA O ARQUIVO JSON
+#Arquivo de dados
 ARQUIVO_DADOS = "dados.json"
 
 
 #Classe para o servidor
 class MyHandle(BaseHTTPRequestHandler):
     
-    # << ALTERAÇÃO: FUNÇÃO AUXILIAR PARA CARREGAR FILMES DO JSON
-    def _load_filmes_from_json(self):
+    #Carregar filmes do arquivo dados.json
+    def carregar_filmes(self):
         if os.path.exists(ARQUIVO_DADOS):
             try:
                 with open(ARQUIVO_DADOS, encoding='utf-8') as lista:
@@ -28,8 +28,8 @@ class MyHandle(BaseHTTPRequestHandler):
                 return []
         return []
 
-    # << ALTERAÇÃO: FUNÇÃO AUXILIAR PARA SALVAR FILMES NO JSON
-    def _save_filmes_to_json(self, filmes_list):
+    #Salvar os dados no arquivo dados.json
+    def salvar_filme(self, filmes_list):
         with open(ARQUIVO_DADOS, "w", encoding="utf-8") as lista:
             json.dump(filmes_list, lista, indent=4, ensure_ascii=False)
     
@@ -69,7 +69,7 @@ class MyHandle(BaseHTTPRequestHandler):
 
     #Função para realizar as operações do método GET a depender do caminho especificado
     def do_GET(self):
-        # << ALTERAÇÃO: EXTRAI O CAMINHO DA URL (necessário para DELETE/PATCH no cliente)
+        #Pegar a URL
         parsed_path = urlparse(self.path)
         path = parsed_path.path
         
@@ -107,75 +107,53 @@ class MyHandle(BaseHTTPRequestHandler):
                 self.send_error(404, "File Not Found")
 
 
-        #Caso o caminho seja o de listar filmes, o bloco abaixo será executado e caso ocorra um erro, a exceção será chamada
-        elif path == "/listar_filmes_teste":
-            #Bloco de código para abrir o arquivo listar_filmes_teste.html e colocar seu conteúdo na var content
-            try:
-                with open(os.path.join(os.getcwd(), "listar_filmes_teste.html"), encoding='utf-8') as listar_filmes_teste:
-                    content = listar_filmes_teste.read()
-
-                #Variável para armazenar o conteúdo html do filme
-                filmes_html = ""
-
-                #Se não tiver nenhum filme, uma mensagem de nenhum filme cadastrado aparecerá
-                if not filmes:
-                    filmes_html = '<p>Nenhum filme cadastrado</p>'
-                #Caso tenha algum filme, criará o html do filme
-                else:
-                    for filme_id, filme_data in filmes.items():
-                        filmes_html += f"""
-                        <article>
-                            <h3>{filme_data.get('nome')}</h3>
-                            <p><strong>Atores:</strong> {filme_data.get('atores')}</p>
-                            <p><strong>Diretor:</strong> {filme_data.get('diretor')}</p>
-                            <p><strong>Ano:</strong> {filme_data.get('ano_lancamento',)}</p>
-                            <p><strong>Genero:</strong> {filme_data.get('genero')}</p>
-                            <p><strong>Produtora:</strong> {filme_data.get('produtora')}</p>
-                            <p><strong>Sinopse:</strong> {filme_data.get('sinopse')}</p>
-                            <br>
-                        </article>
-                        """
-
-                #Dar replace no comentário do html pelo conteúdo do filme
-                final_content = content.replace('',filmes_html)
-
-                #Enviar resposta de sucesso e dados do header
-                self.send_response(200)
-                self.send_header("Content-type", "text/html")
-                self.end_headers()
-                #Escrever o conteúdo guardado no content na tela com a encodificação utf-8
-                self.wfile.write(final_content.encode('utf-8'))
-            #Exceção que envia um erro 404 caso o try não funcione corretamente
-            except FileNotFoundError:
-                self.send_error(404, "File Not Found")
-
-
-        #Caso o caminho seja o de listar filmes, o bloco abaixo será executado e caso ocorra um erro, a exceção será chamada
+       #Retornar a lista de jsons
         elif path == "/listar_filmes":
-            # << ALTERAÇÃO: Utiliza a função auxiliar para carregar o JSON
-            filmes_mari = self._load_filmes_from_json()
+            # Carregar filmes
+            filmes_mari = self.carregar_filmes()
 
             self.send_response(200)
             self.send_header("content-type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps(filmes_mari).encode("utf-8"))
+            return # Importante: Adicionar 'return'
 
-        #ALTERADO
-        #Caso nenhum caminho tenha sido especificado, tentamos servir o arquivo ou retornar 404
+        #Carregar a página que lista os filmes em html
+        elif path == "/listar_filmes_html":
+            try:
+                # Carrega o arquivo HTML puro
+                with open(os.path.join(os.getcwd(), "listar_filmes.html"), encoding='utf-8') as f:
+                    content = f.read()
+                
+                #Enviar resposta de sucesso e dados do header 
+                self.send_response(200)
+                self.send_header("Content-type", "text/html")
+                self.end_headers()
+                #Escrever o conteúdo guardado no content na tela com a encodificação utf-8
+                self.wfile.write(content.encode('utf-8'))
+                return
+                
+            #Caso não encontre o arquivo
+            except FileNotFoundError:
+                self.send_error(404, "Arquivo HTML de listagem (listar_filmes.html) não encontrado")
+                return
+
+        #Caso nenhum caminho tenha sido especificado
         else:
-            # Se for a raiz, tenta servir index.html (via list_directory)
+            #Se for a raiz, mostrar index.html
             if path == '/':
                 return self.list_directory(os.getcwd())
 
-            # Se for um caminho para um arquivo estático (ex: /script.js)
+            #Se for um caminho para um arquivo estático
             try:
-                # Remove a barra inicial e tenta abrir o arquivo
+                #Remover a barra inicial e abrir o arquivo
                 file_path = path[1:]
                 
-                # Se o arquivo existir no diretório, tenta servir
+                #Mostrar o arquivo
                 if os.path.exists(file_path) and not os.path.isdir(file_path):
                     
-                    mime_type = 'application/octet-stream' # Tipo padrão
+                    #Tipo do arquivo
+                    mime_type = 'application/octet-stream'
                     if file_path.endswith('.html'):
                         mime_type = 'text/html'
                     elif file_path.endswith('.css'):
@@ -183,6 +161,7 @@ class MyHandle(BaseHTTPRequestHandler):
                     elif file_path.endswith('.js'):
                         mime_type = 'application/javascript'
                     
+                    #Abrir aarquivo
                     with open(file_path, 'rb') as f:
                         self.send_response(200)
                         self.send_header("Content-type", mime_type)
@@ -191,10 +170,9 @@ class MyHandle(BaseHTTPRequestHandler):
                         return
 
             except Exception:
-                # Ignora erros de leitura de arquivo
                 pass
                 
-            # Se não for a raiz e não for um arquivo encontrado, retorna 404
+            #Se não for a raiz e não for um arquivo encontrado
             self.send_error(404, "Caminho ou arquivo não mapeado")
 
     #Requisições POST
@@ -304,16 +282,16 @@ class MyHandle(BaseHTTPRequestHandler):
             produtora = form_data.get('produtora', [""])[0].strip()
             sinopse = form_data.get('sinopse', [""])[0].strip()
             
-            # << ALTERAÇÃO: LÓGICA CORRIGIDA PARA GARANTIR ID ÚNICO E PERSISTENTE
-            filmes_mari = self._load_filmes_from_json()
+            #Puxar os dados dos jsons
+            filmes_mari = self.carregar_filmes()
             
-            # Define o ID, garantindo que seja o maior ID atual + 1
+            #Novo id único
             max_id = max([f.get('id', 0) for f in filmes_mari]) if filmes_mari else 0
             new_id = max_id + 1
 
             #Criar o dicionário do filme
             filme_mari = {
-                "id": new_id, # << ADICIONADO ID (Essencial para DELETE/PATCH)
+                "id": new_id,
                 "nome": nome_filme,
                 "atores": atores,
                 "diretor": diretor,
@@ -326,9 +304,9 @@ class MyHandle(BaseHTTPRequestHandler):
             filmes_mari.append(filme_mari)
             
             #Transformar a lista em json
-            self._save_filmes_to_json(filmes_mari)
+            self.salvar_filme(filmes_mari)
             
-            # Enviar resposta de sucesso
+            #Enviar resposta de sucesso
             self.send_response(201) # 201 Created
             self.send_header("Content-type", "application/json")
             self.end_headers()
@@ -338,12 +316,12 @@ class MyHandle(BaseHTTPRequestHandler):
         else:
             super().do_POST()
 
-    # << ALTERAÇÃO: NOVO MÉTODO PATCH (Atualização parcial)
+    #Patch
     def do_PATCH(self):
         parsed_path = urlparse(self.path)
         path_parts = parsed_path.path.split('/')
         
-        # Espera-se uma URL como /filmes_mari/ID
+        #Pegar a URL
         if len(path_parts) == 3 and path_parts[1] == 'filmes_mari':
             try:
                 filme_id = int(path_parts[2])
@@ -351,8 +329,10 @@ class MyHandle(BaseHTTPRequestHandler):
                 self.send_error(400, "ID do filme inválido.")
                 return
 
-            filmes_mari = self._load_filmes_from_json()
+            #Carregar os filmes
+            filmes_mari = self.carregar_filmes()
             
+            #Encontrar o filme
             filme_encontrado = None
             filme_index = -1
             for i, filme in enumerate(filmes_mari):
@@ -361,10 +341,12 @@ class MyHandle(BaseHTTPRequestHandler):
                     filme_index = i
                     break
             
+            #Caso o filme não seja encontrado
             if filme_encontrado is None:
                 self.send_error(404, "Filme não encontrado.")
                 return
-
+            
+            #Corpo da requisição
             content_length = int(self.headers.get('Content-Length', 0))
             if content_length > 0:
                 try:
@@ -379,8 +361,9 @@ class MyHandle(BaseHTTPRequestHandler):
                     if chave in filme_encontrado and chave != 'id': 
                         filme_encontrado[chave] = valor
                 
+                #Salvar os dados e enviar
                 filmes_mari[filme_index] = filme_encontrado
-                self._save_filmes_to_json(filmes_mari)
+                self.salvar_filme(filmes_mari)
 
                 self.send_response(200) # 200 OK
                 self.send_header("Content-type", "application/json")
@@ -392,12 +375,13 @@ class MyHandle(BaseHTTPRequestHandler):
             self.send_error(404, "Caminho PATCH inválido. Use /filmes_mari/<ID>")
 
 
-    # << ALTERAÇÃO: NOVO MÉTODO DELETE (Exclusão)
+    #Delete
     def do_DELETE(self):
+
+        #Pegar a URL
         parsed_path = urlparse(self.path)
         path_parts = parsed_path.path.split('/')
         
-        # Espera-se uma URL como /filmes_mari/ID
         if len(path_parts) == 3 and path_parts[1] == 'filmes_mari':
             try:
                 filme_id = int(path_parts[2])
@@ -405,7 +389,8 @@ class MyHandle(BaseHTTPRequestHandler):
                 self.send_error(400, "ID do filme inválido.")
                 return
 
-            filmes_mari = self._load_filmes_from_json()
+            #Carregar os filmes
+            filmes_mari = self.carregar_filmes()
             
             filme_index_to_delete = -1
             for i, filme in enumerate(filmes_mari):
@@ -419,9 +404,9 @@ class MyHandle(BaseHTTPRequestHandler):
 
             # Remove o filme e salva
             filmes_mari.pop(filme_index_to_delete)
-            self._save_filmes_to_json(filmes_mari)
+            self.salvar_filme(filmes_mari)
 
-            self.send_response(200) # 200 OK
+            self.send_response(200)
             self.send_header("Content-type", "application/json")
             self.end_headers()
             response = {"message": f"Filme com ID {filme_id} removido com sucesso."}

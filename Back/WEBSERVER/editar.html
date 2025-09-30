@@ -1,45 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Filme</title>
-    <script defer src="script.js"></script>
-    <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-    <main>
-        <h1>Editar Filme: <span id="filme-nome-atual"></span></h1>
-        
-        <form id="form-edicao">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Editar Filme</title>
+        <script defer src="script.js"></script>
+        <link rel="stylesheet" href="style.css"/>
+    </head>
+    <body>
+        <main>
+
+            <!--Título-->
+            <h1>Editar Filme: <p id="filme-nome-atual"></p></h1>
             
-            <input type="hidden" id="filme-id">
+            <!--Formulário de edição do filme-->
+            <form id="form-edicao">
+                <input type="hidden" id="filme-id">
+                <label for="nome">Nome do Filme:</label>
+                <input type="text" id="nome" name="nome"><br><br>
+
+                <label for="atores">Atores:</label>
+                <input type="text" id="atores" name="atores"><br><br>
+
+                <label for="diretor">Diretor:</label>
+                <input type="text" id="diretor" name="diretor"><br><br>
+
+                <label for="ano_lancamento">Ano de Lançamento:</label>
+                <input type="text" id="ano_lancamento" name="ano_lancamento"><br><br>
+
+                <label for="genero">Gênero:</label>
+                <input type="text" id="genero" name="genero"><br><br>
+
+                <label for="produtora">Produtora:</label>
+                <input type="text" id="produtora" name="produtora"><br><br>
+
+                <label for="sinopse">Sinopse:</label><br>
+                <textarea id="sinopse" name="sinopse" rows="4"></textarea><br><br>
+
+                <button type="submit">Salvar Alterações</button>
+            </form>
             
-            <label for="nome_filme">Nome do Filme:</label>
-            <input type="text" id="nome_filme" name="nome_filme"><br><br>
-
-            <label for="atores">Atores:</label>
-            <input type="text" id="atores" name="atores"><br><br>
-
-            <label for="diretor">Diretor:</label>
-            <input type="text" id="diretor" name="diretor"><br><br>
-
-            <label for="ano_lancamento">Ano de Lançamento:</label>
-            <input type="text" id="ano_lancamento" name="ano_lancamento"><br><br>
-
-            <label for="genero">Gênero:</label>
-            <input type="text" id="genero" name="genero"><br><br>
-
-            <label for="produtora">Produtora:</label>
-            <input type="text" id="produtora" name="produtora"><br><br>
-
-            <label for="sinopse">Sinopse:</label><br>
-            <textarea id="sinopse" name="sinopse" rows="4"></textarea><br><br>
-
-            <button type="submit">Salvar Alterações</button>
-        </form>
-        
-        <p><a href="listar_filmes.html">Voltar para a Lista</a></p>
-    </main>
-</body>
+            <!--Navegar de volta para a página de filmes-->
+            <p><a href="listar_filmes_html">Voltar para a Lista</a></p>
+        </main>
+    </body>
 </html>

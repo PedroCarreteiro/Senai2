@@ -1,43 +1,34 @@
 const lis = document.querySelector('#idlistinea')
 
-// -----------------------------------------------------------
-// FUNÇÃO AUXILIAR: Redireciona para a página de edição
-// -----------------------------------------------------------
-// Esta função simula o "link" para a página de edição,
-// passando o ID via URL (Ex: editar.html?id=123)
-function irParaEdicao(id) {
-    // Redireciona para a página de edição, passando o ID do filme na query string
+//Passar o ID na URL
+async function irParaEdicao(id) {
+    //Redirecionar para a página de edição
     window.location.href = `editar.html?id=${id}`;
 }
 
-
-// =========================================================================
-// LÓGICA EXCLUSIVA PARA A PÁGINA DE EDIÇÃO (editar.html)
-// =========================================================================
-
-// Função auxiliar para obter parâmetros da URL (Ex: ?id=123)
-function getFilmeIdFromUrl() {
+//Obter parâmetros da URL
+function getFilmeUrl() {
     const params = new URLSearchParams(window.location.search);
     return params.get('id');
 }
 
-// Função que carrega o filme e preenche o formulário
+//Carregar o filme e preencher o formulário com os dados que já tem
 async function carregarDadosParaEdicao() {
-    const filmeId = getFilmeIdFromUrl();
+    const filmeId = getFilmeUrl();
     const form = document.getElementById('form-edicao');
 
     if (!form || !filmeId) {
-        // Não estamos na página de edição ou o ID está faltando
+        //Não está na página de edição ou o ID está faltando
         return; 
     }
 
-    // 1. Fazer GET para obter todos os filmes e encontrar o filme específico
+    //Get de todos os filmes e do específico
     try {
         const response = await fetch('http://localhost:8000/listar_filmes');
         if (!response.ok) throw new Error('Falha ao carregar a lista de filmes.');
         
         const filmes = await response.json();
-        const filme = filmes.find(f => String(f.id) === filmeId); // Compara como string
+        const filme = filmes.find(f => String(f.id) === filmeId);
 
         if (!filme) {
             alert("Filme não encontrado!");
@@ -45,11 +36,11 @@ async function carregarDadosParaEdicao() {
             return;
         }
 
-        // 2. Preencher os campos do formulário com os dados atuais
-        document.getElementById('filme-nome-atual').textContent = filme.nome; // Atualiza o título
-        document.getElementById('filme-id').value = filmeId; // Campo oculto
+        //Preencher os campos do formulário com os dados atuais
+        document.getElementById('filme-nome-atual').textContent = filme.nome; 
+        document.getElementById('filme-id').value = filmeId;
         
-        document.getElementById('nome_filme').value = filme.nome || '';
+        document.getElementById('nome').value = filme.nome || '';
         document.getElementById('atores').value = filme.atores || '';
         document.getElementById('diretor').value = filme.diretor || '';
         document.getElementById('ano_lancamento').value = filme.ano_lancamento || '';
@@ -57,26 +48,27 @@ async function carregarDadosParaEdicao() {
         document.getElementById('produtora').value = filme.produtora || '';
         document.getElementById('sinopse').value = filme.sinopse || '';
 
-        // 3. Configurar o evento de submissão do formulário
+        //Enviar formulário
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Coletar todos os dados do formulário
+            //Pegar dados do formulário
             const formData = new FormData(e.target);
             const dadosPatch = {};
             
-            // Criar o objeto JSON a ser enviado
+            //Criar o json pra enviar
             for (const [key, value] of formData.entries()) {
-                // Não incluir o campo oculto 'filme-id' no PATCH body
+                //Não fazer patch do id
                 if (key !== 'filme-id') { 
                     dadosPatch[key] = value.trim();
                 }
             }
 
-            // Chamar a função de envio do PATCH
+            //Enviar patch
             enviarPatch(filmeId, dadosPatch);
         });
 
+    //Caso haja erro
     } catch (error) {
         console.error("Erro ao carregar dados de edição:", error);
         alert("Não foi possível carregar os dados para edição.");
@@ -84,16 +76,14 @@ async function carregarDadosParaEdicao() {
     }
 }
 
-// Executa a função de carregamento assim que a página estiver pronta
+//Executa o recarregamento
 document.addEventListener('DOMContentLoaded', carregarDadosParaEdicao);
 
 
-// =========================================================================
-// FUNÇÃO DE ENVIO DO PATCH (enviada por você em uma resposta anterior, adaptada)
-// =========================================================================
-// OBS: Esta função precisa estar definida no seu script.js.
-function enviarPatch(id, dadosPatch) {
+//Função para enviar o patch
+async function enviarPatch(id, dadosPatch) {
     
+    //URL para os dados do patch
     fetch(`http://localhost:8000/filmes_mari/${id}`, {
         method: 'PATCH',
         headers: {
@@ -101,17 +91,18 @@ function enviarPatch(id, dadosPatch) {
         },
         body: JSON.stringify(dadosPatch)
     })
+    //Alerta e redirecionento de sucesso
     .then(response => {
         if (response.ok) {
             alert(`Filme ID ${id} atualizado com sucesso!`);
             
-            // REDIRECIONAMENTO APÓS SUCESSO DO PATCH
             window.location.href = 'listar_filmes.html'; 
             
         } else {
             alert('Erro ao tentar atualizar o filme. Verifique o servidor.');
         }
     })
+    //Caso de erro
     .catch(error => {
         console.error('Erro na requisição PATCH:', error);
         alert('Erro de conexão ao tentar atualizar.');
@@ -119,28 +110,29 @@ function enviarPatch(id, dadosPatch) {
 }
 
 
-// -----------------------------------------------------------
-// FUNÇÃO DELETE (Exclusão): Faz o refresh
-// -----------------------------------------------------------
-function deletarFilme(id) {
+//Delete
+async function deletarFilme(id) {
+    //Confirmar deleção
     if (!confirm(`Tem certeza que deseja excluir o filme com ID ${id}?`)) {
         return;
     }
 
+    //URl de transição de dados
     fetch(`http://localhost:8000/filmes_mari/${id}`, {
         method: 'DELETE'
     })
+    //Alerta e reload de sucesso
     .then(response => {
         if (response.ok) {
             alert(`Filme ${id} excluído com sucesso!`);
             
-            // <<< MANTÉM NA PÁGINA, APENAS RECARREGA A LISTA (refresh)
             window.location.reload(); 
             
         } else {
             alert('Erro ao tentar excluir o filme.');
         }
     })
+    //Caso aconteça um erro 
     .catch(error => {
         console.error('Erro na requisição DELETE:', error);
         alert('Erro de conexão ao tentar excluir.');
@@ -148,9 +140,7 @@ function deletarFilme(id) {
 }
 
 
-// -----------------------------------------------------------
-// CARREGAMENTO E RENDERIZAÇÃO INICIAL DA LISTA
-// -----------------------------------------------------------
+//Caregara página de listar filmes com os jsons
 fetch('http://localhost:8000/listar_filmes').then((res) => {
     return res.json();
 }).then((data) => {
