@@ -7,10 +7,6 @@ from urllib.parse import parse_qs, urlparse
 import json
 
 
-filmes = {}
-
-id_counter = 0
-
 #Arquivo de dados
 ARQUIVO_DADOS = "dados.json"
 
@@ -210,61 +206,8 @@ class MyHandle(BaseHTTPRequestHandler):
             #Mensagem de sucesso (pode ser uma nova página)
             self.wfile.write(logou.encode("utf-8"))
 
-        #Pegar o caminho que está no formulário de cadastro no html para cadastrar um filme
+        #Cadastro de filme
         elif self.path == '/send_filme':
-            #Contador para os ids
-            global id_counter
-            
-            #Ler o tamanho do corpo da requisição
-            content_length = int(self.headers['Content-length'])
-            #Ler o que veio
-            body = self.rfile.read(content_length).decode('utf-8')
-            #Pegar as informações do que veio
-            form_data = parse_qs(body)
-
-            #Extrair os dados do formulário
-            nome_filme = form_data.get('nome_filme', [""])[0].strip()
-            atores = form_data.get('atores', [""])[0].strip()
-            diretor = form_data.get('diretor', [""])[0].strip()
-            ano_lancamento = form_data.get('ano_lancamento', [""])[0].strip()
-            genero = form_data.get('genero', [""])[0].strip()
-            produtora = form_data.get('produtora', [""])[0].strip()
-            sinopse = form_data.get('sinopse', [""])[0].strip()
-            
-            #Aumentar o contador
-            id_counter += 1
-            #Transferir o contador para str
-            filme_id = str(id_counter)
-            
-            #Criar o dicionário do filme
-            filme = {
-                "nome": nome_filme,
-                "atores": atores,
-                "diretor": diretor,
-                "ano_lancamento": ano_lancamento,
-                "genero": genero,
-                "produtora": produtora,
-                "sinopse": sinopse
-            }
-
-            #Adicionar o filme ao dicionário de filmes
-            filmes[filme_id] = filme
-            
-            #Resposta JSON
-            response = {
-                "message": "Filme cadastrado com sucesso!",
-                "filme_id": filme_id,
-                "filme": filme
-            }
-            
-            # Enviar resposta de sucesso
-            self.send_response(201) # 201 Created
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
-            self.wfile.write(json.dumps(response).encode("utf-8"))
-
-
-        elif self.path == '/send_filme_mari':
             
             #Ler o tamanho do corpo da requisição
             content_length = int(self.headers['Content-length'])
