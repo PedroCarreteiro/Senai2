@@ -1,0 +1,177 @@
+Table filme [headercolor: #020203] {
+	id integer [ pk, increment, not null, unique ]
+	titulo varchar(255) [ not null ]
+	orcamento decimal [ not null ]
+	tempo_duracao time [ not null ]
+	ano date [ not null ]
+	poster text(65535)
+}
+
+Table genero [headercolor: #e3e01b] {
+	id integer [ pk, increment, not null, unique ]
+	nome varchar(255) [ not null ]
+}
+
+Table filme_genero [headercolor: #e3e01b] {
+	id integer [ pk, increment, not null, unique ]
+	id_filme integer [ not null ]
+	id_genero integer [ not null ]
+}
+
+Table filme_diretor [headercolor: #175e7a] {
+	id integer [ pk, increment, not null, unique ]
+	id_filme integer [ not null ]
+	id_diretor integer [ not null ]
+}
+
+Table filme_ator [headercolor: #0ffa2a] {
+	id integer [ pk, increment, not null, unique ]
+	id_filme integer [ not null ]
+	id_ator integer [ not null ]
+}
+
+Table filme_linguagem [headercolor: #ff9d0a] {
+	id integer [ pk, increment, not null, unique ]
+	id_filme integer [ not null ]
+	id_linguagem integer [ not null ]
+}
+
+Table filme_pais [headercolor: #4e0ffc] {
+	id integer [ pk, increment, not null, unique ]
+	id_filme integer [ not null ]
+	id_pais integer [ not null ]
+}
+
+Table filme_produtora [headercolor: #12ffc4] {
+	id integer [ pk, increment, not null, unique ]
+	id_filme integer [ not null ]
+	id_produtora integer [ not null ]
+}
+
+Table ator [headercolor: #0ffa2a] {
+	id integer [ pk, increment, not null, unique ]
+	nome varchar(255) [ not null ]
+	sobrenome varchar(255) [ not null ]
+	id_sexo integer [ not null ]
+}
+
+Table sexo [headercolor: #bb0cf5] {
+	id integer [ pk, increment, not null, unique ]
+	nome varchar(255) [ not null ]
+}
+
+Table diretor [headercolor: #175e7a] {
+	id integer [ pk, increment, not null, unique ]
+	nome varchar(255) [ not null ]
+	sobrenome varchar(255) [ not null ]
+	id_sexo integer [ not null ]
+}
+
+Table nacionalidade [headercolor: #fa0c20] {
+	id integer [ pk, increment, not null, unique ]
+	nome varchar(255) [ not null ]
+	id_pais integer [ not null ]
+}
+
+Table pais [headercolor: #4e0ffc] {
+	id integer [ pk, increment, not null, unique ]
+	nome varchar(255) [ not null ]
+}
+
+Table produtora [headercolor: #12ffc4] {
+	id integer [ pk, increment, not null, unique ]
+	nome varchar(255) [ not null ]
+}
+
+Table linguagem [headercolor: #ff9d0a] {
+	id integer [ pk, increment, not null, unique ]
+	nome varchar(255) [ not null ]
+}
+
+Table ator_nacionalidade [headercolor: #f72828] {
+	id integer [ pk, increment, not null, unique ]
+	id_ator integer [ not null ]
+	id_nacionalidade integer [ not null ]
+}
+
+Table diretor_nacionalidade [headercolor: #175e7a] {
+	id integer [ pk, increment, not null, unique ]
+	id_diretor integer [ not null ]
+	id_nacionalidade integer [ not null ]
+}
+
+Ref "" {
+	filme_genero.id_filme > filme.id [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	genero.id < filme_genero.id_genero [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	sexo.id < ator.id_sexo [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	filme.id < filme_ator.id_filme [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	ator.id < filme_ator.id_ator [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	filme.id < filme_diretor.id_filme [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	pais.id - filme_pais.id [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	filme.id < filme_pais.id_pais [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	nacionalidade.id_pais - pais.id [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	filme.id < filme_produtora.id_filme [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	produtora.id < filme_produtora.id_produtora [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	linguagem.id < filme_linguagem.id_linguagem [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	filme.id < filme_linguagem.id_filme [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	diretor.id < filme_diretor.id_diretor [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	sexo.id < diretor.id_sexo [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	diretor.id < diretor_nacionalidade.id_diretor [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	nacionalidade.id < diretor_nacionalidade.id_nacionalidade [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	nacionalidade.id < ator_nacionalidade.id_nacionalidade [ delete: no action, update: no action ]
+}
+
+Ref "" {
+	ator.id < ator_nacionalidade.id_ator [ delete: no action, update: no action ]
+}
