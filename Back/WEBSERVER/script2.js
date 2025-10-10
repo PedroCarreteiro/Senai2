@@ -151,7 +151,7 @@ fetch('http://localhost:8000/listar_filmes').then((res) => {
     data.forEach((lista) => {
 
         //Confirmar item que vai ser listado
-        if(typeof lista !== 'object' || lista === null || !lista.nome || !lista.id){
+        if(typeof lista !== 'object' || lista === null || !lista.titulo|| !lista.id){
             return;
         }
 
@@ -159,13 +159,11 @@ fetch('http://localhost:8000/listar_filmes').then((res) => {
 
         lis.innerHTML += `
         <li>
-            <strong>Nome do Filme: </strong> ${lista.nome} </br>
-            <strong>Atores: </strong> ${lista.atores} </br>
-            <strong>Diretor: </strong> ${lista.diretor} </br>
-            <strong>Ano de Lançamento: </strong> ${lista.ano_lancamento} </br>
-            <strong>Genero: </strong> ${lista.genero} </br>
-            <strong>Produtora: </strong> ${lista.produtora} </br>
-            <strong>Sinopse: </strong> ${lista.sinopse} </br>
+            <strong>Nome do Filme: </strong> ${lista.titulo} </br>
+            <strong>Orçamento: </strong> ${lista.orcamento} </br>
+            <strong>Duração (Minutos): </strong> ${lista.tempoDuracao} </br>
+            <strong>Ano de Lançamento: </strong> ${lista.ano} </br>
+            <strong>Poster </strong> <img src="${lista.poster}"> </br>
             <button onclick="irParaEdicao('${filmeId}')">Editar</button>
             
             <button onclick="deletarFilme('${filmeId}')">Excluir</button>

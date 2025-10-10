@@ -16,6 +16,7 @@ mydb = mysql.connector.connect(
 
 #Arquivo de dados
 ARQUIVO_DADOS = "dados.json"
+json_banco = "banco.json"
 
 
 #Classe para o servidor
@@ -35,6 +36,12 @@ class MyHandle(BaseHTTPRequestHandler):
     def salvar_filme(self, filmes_list):
         with open(ARQUIVO_DADOS, "w", encoding="utf-8") as lista:
             json.dump(filmes_list, lista, indent=4, ensure_ascii=False)
+
+
+    #Salvar os dados no arquivo dados.json
+    def salvar_filme_banco(self, filmes_banco_list):
+        with open(json_banco, "w", encoding="utf-8") as lista:
+            json.dump(filmes_banco_list, lista, indent=4, ensure_ascii=False)
     
     #Função para listar os caminhos do servidor
     def list_directory(self, path):
@@ -58,6 +65,15 @@ class MyHandle(BaseHTTPRequestHandler):
         return super().list_directory(path)
     
 
+    def carregarJsonBanco(self):
+        if os.path.exists(json_banco):
+            try:
+                with open(json_banco, encoding='utf-8') as banco:
+                    return json.load(banco)
+            except json.JSONDecodeError:
+                return []
+        return []
+
 
     #Função adicionada junto com o banco
     def loadFilminhos(self):
@@ -73,17 +89,36 @@ class MyHandle(BaseHTTPRequestHandler):
 
         print("--------------------------/n", result)
 
-        #Printar o resultado
+        filmes_banco = self.carregarJsonBanco()
+
         for res in result:
             id = res[0]
             titulo = res[1]
             orcamento = res[2]
-            tempo_duracao = res[3]
+            tempoDuracao = res[3]
             ano = res[4]
             poster = res[5]
-            print(id, titulo, orcamento, tempo_duracao, ano, poster)
+
+            filme_banco = {
+                "id": id,
+                "titulo": titulo,
+                "orcamento": orcamento,
+                "tempoDuracao": tempoDuracao,
+                "ano": ano,
+                "poster": poster,
+            }
+
+            if filmes_banco.__contains__(filme_banco):
+                print("Já cadastrado")
+            else:
+                filmes_banco.append(filme_banco)
+                print(filme_banco)
+                self.salvar_filme_banco(filmes_banco)
 
 
+            
+
+        #Puxar os dados dos jsons
 
     #Função para realizar a verificação de login, onde apenas identificará o user se o conteúdo dos campos estiver igual ao das vars
     def account_user(self, login, password):
@@ -140,12 +175,13 @@ class MyHandle(BaseHTTPRequestHandler):
        #Retornar a lista de jsons
         elif path == "/listar_filmes":
             # Carregar filmes
-            filmes_mari = self.carregar_filmes()
+            self.loadFilminhos()
+            filmes_banco = self.carregarJsonBanco()
 
             self.send_response(200)
             self.send_header("content-type", "application/json")
             self.end_headers()
-            self.wfile.write(json.dumps(filmes_mari).encode("utf-8"))
+            self.wfile.write(json.dumps(filmes_banco).encode("utf-8"))
             return # Importante: Adicionar 'return'
 
         #Carregar a página que lista os filmes em html

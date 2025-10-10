@@ -5,9 +5,15 @@ use filmes;
 CREATE TABLE filme (
 	id INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
 	titulo VARCHAR(255) NOT NULL,
+<<<<<<< HEAD
+	orcamento FLOAT NOT NULL,
+	tempo_duracao INTEGER NOT NULL,
+	ano YEAR NOT NULL,
+=======
 	orcamento DECIMAL NOT NULL,
 	tempo_duracao TIME NOT NULL,
 	ano DATE NOT NULL,
+>>>>>>> bb83dd65a52da5f11051f5a93091b52001893092
 	poster VARCHAR(255),
 	PRIMARY KEY(id)
 );
