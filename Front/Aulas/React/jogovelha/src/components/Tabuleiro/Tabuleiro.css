@@ -1,0 +1,13 @@
+.fileira{
+    max-height: 10rem;
+    max-width: 35rem;
+    min-height: 10rem;
+    min-width: 35rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-bottom: 0.85rem;
+    padding-top: 0.85rem;
+    background-color: var(--roxoEscuro);
+}
+

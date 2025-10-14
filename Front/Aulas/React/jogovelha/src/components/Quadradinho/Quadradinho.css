@@ -1,0 +1,30 @@
+.quadradin{
+    border: 2px solid var(--branco);
+    min-width: 10rem;
+    min-height: 10rem;
+    max-width: 10rem;
+    max-height: 10rem;
+    background-color: var(--roxoEscuro);
+    color: var(--branco);
+    font-size: xx-large;
+}
+
+.quadradinLaranja{
+    min-width: 10rem;
+    min-height: 10rem;
+    max-width: 10rem;
+    max-height: 10rem;
+    background-color: var(--laranja);
+    color: var(--branco);
+    font-size: xx-large;
+}
+
+.quadradinVerde{
+    min-width: 10rem;
+    min-height: 10rem;
+    max-width: 10rem;
+    max-height: 10rem;
+    background-color: var(--verde);
+    color: var(--branco);
+    font-size: xx-large;
+}
