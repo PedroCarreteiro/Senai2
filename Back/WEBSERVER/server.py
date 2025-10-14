@@ -10,7 +10,7 @@ import mysql.connector #pip install mysql-connector-python
 mydb = mysql.connector.connect(
     host = "localhost",
     user = "root",
-    password = "senai"
+    password = "1234"
 )
 
 
@@ -432,6 +432,8 @@ class MyHandle(BaseHTTPRequestHandler):
 def main():
     #Iniciar o servidor na porta 8000
     server_address = ('',8000)
+    with open(json_banco, "w", encoding="utf-8") as f:
+        json.dump([], f, ensure_ascii=False, indent=4)
     #Objeto para indicar o endereço do server e que ele será utilizado com o MyHandle
     httpd = HTTPServer(server_address, MyHandle)
     #Imprimir o caminho do servidor
