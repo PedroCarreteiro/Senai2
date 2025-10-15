@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    font-family: 'Oswald', sans-serif;
+    font-size: large;
+}
+
+:root{
+    --roxoEscuro: #392973;
+    --roxo: #2F208C;
+    --verde: #03A62C;
+    --laranja: #F29F05;
+    --branco: #F2F2F2;
+}
+
+.tabuleiroBackground{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 15rem;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 10rem;
+}
+
+main{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    color: var(--branco);
+    background-image: url("./assets/background.jpg");
+}
