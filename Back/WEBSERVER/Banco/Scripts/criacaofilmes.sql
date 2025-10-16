@@ -8,9 +8,6 @@ CREATE TABLE filme (
 	orcamento FLOAT NOT NULL,
 	tempo_duracao INTEGER NOT NULL,
 	ano YEAR NOT NULL,
-	orcamento DECIMAL NOT NULL,
-	tempo_duracao TIME NOT NULL,
-	ano DATE NOT NULL,
 	poster VARCHAR(255),
 	PRIMARY KEY(id)
 );
@@ -153,4 +150,5 @@ CREATE TABLE diretor_nacionalidade (
 	PRIMARY KEY(id),
     FOREIGN KEY (id_diretor) REFERENCES diretor(id),
     FOREIGN KEY (id_nacionalidade) REFERENCES nacionalidade(id)
+
 );
