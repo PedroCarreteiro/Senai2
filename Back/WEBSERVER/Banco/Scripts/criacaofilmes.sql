@@ -1,3 +1,4 @@
+drop database if exists filmes;
 create database filmes;
 
 use filmes;
@@ -150,5 +151,4 @@ CREATE TABLE diretor_nacionalidade (
 	PRIMARY KEY(id),
     FOREIGN KEY (id_diretor) REFERENCES diretor(id),
     FOREIGN KEY (id_nacionalidade) REFERENCES nacionalidade(id)
-
 );
