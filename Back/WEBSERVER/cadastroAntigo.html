@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastro</title>
+        <link rel="stylesheet" href="style.css"/>
+    </head>
+    <body>
+        <main>
+            <!--Título da página-->
+            <h1>Cadastro de filmes</h1>
+            <!--Formulário de cadastro de filmes com opção de cadastro-->
+            <form action = "send_filme" method="post">
+                <label>Nome do filme</label>
+                <input placeholder="Nome do filme" name="nome_filme"/>
+                <label>Atores</label>
+                <input placeholder="Atores" name="atores"/>
+                <label>Diretor</label>
+                <input placeholder="Diretor" name="diretor"/>
+                <label>Ano</label>
+                <input placeholder="Ano" name="ano_lancamento"/>
+                <label>Gênero</label>
+                <input placeholder="Gênero" name="genero"/>
+                <label>Produtora</label>
+                <input placeholder="Produtora" name="produtora"/>
+                <label>Sinopse</label>
+                <textarea placeholder="Sinopse" name="sinopse"></textarea>
+                <button>Cadastrar</button>
+            </form>
+        </main>
+    </body>
+</html>

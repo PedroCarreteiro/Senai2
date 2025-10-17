@@ -10,7 +10,7 @@ import mysql.connector #pip install mysql-connector-python
 mydb = mysql.connector.connect(
     host = "localhost",
     user = "root",
-    password = "1234"
+    password = "senai"
 )
 
 
@@ -116,9 +116,79 @@ class MyHandle(BaseHTTPRequestHandler):
                 self.salvar_filme_banco(filmes_banco)
 
 
-            
+    def insertFIlminhos(self, titulo, orcamento, tempo_duracao, ano, poster):
+        cursor = mydb.cursor()
 
-        #Puxar os dados dos jsons
+        try:
+            cursor.execute("SELECT id FROM filmes.filme WHERE titulo = %s", (titulo,))
+            filme_existente = cursor.fetchone()
+
+            if filme_existente:
+                print(f"Filme '{titulo}' já cadastrado com ID: {filme_existente[0]}")
+                self.send_response(400)
+                return {"mensagem": "Filme já cadastrado.", "id": filme_existente[0]}
+
+            sql_insert = (
+                "INSERT INTO filmes.filme (titulo, orcamento, tempo_duracao, ano, poster) "
+                "VALUES (%s, %s, %s, %s, %s)"
+            )
+            valores = (titulo, orcamento, tempo_duracao, ano, poster)
+            
+            cursor.execute(sql_insert, valores)
+            
+            cursor.execute("SELECT id FROM filmes.filme WHERE titulo = %s", (titulo,))
+            id_inserido = cursor.fetchone()
+
+            if id_inserido:
+                id_filme = id_inserido[0]
+                cursor.execute("SELECT * FROM filmes.filme WHERE id = %s", (id_filme,))
+                resultado = cursor.fetchall()
+                
+                mydb.commit()
+                self.send_response(201)
+                print(f"Filme inserido com sucesso: {resultado}")
+                return resultado
+            else:
+                mydb.commit() 
+                self.send_response(500)
+                return {"erro": "Erro ao recuperar o ID após a inserção."}
+
+
+        except Exception as e:
+            mydb.rollback()
+            print(f"Erro ao inserir filme: {e}")
+            self.send_response(500)
+            return {"erro": str(e)}
+
+        finally:
+            cursor.close()
+        
+    # EXEMPLO DA AULA
+    # #Insert de filme no banco
+    # def insertFIlminhos(self, titulo, orcamento, tempo_duracao, ano, poster):
+        
+    #     #Conectar o python com o banco
+    #     cursor = mydb.cursor()
+
+    #     cursor.execute("INSERT INTO " \
+    #     "filmes.filme (titulo, orcamento, tempo_duracao, ano, poster) " \
+    #     "VALUES (%s, %s, %s, %s, %s)",
+    #     (titulo, orcamento, tempo_duracao, ano, poster))
+
+    #     cursor.execute("SELECT id FROM filmes.filme WHERE titulo = %s", (titulo,))
+
+    #     resultado = cursor.fetchall()
+    #     print(resultado)
+    #     cursor.execute("SELECT * FROM filmes.filme WHERE id = %s",
+    #                 (resultado[0][0], ))
+        
+    #     resultado = cursor.fetchall()
+    #     cursor.close()
+
+    #     self.send_response(202)
+    #     print(resultado)
+    #     return resultado
+
 
     #Função para realizar a verificação de login, onde apenas identificará o user se o conteúdo dos campos estiver igual ao das vars
     def account_user(self, login, password):
@@ -276,7 +346,57 @@ class MyHandle(BaseHTTPRequestHandler):
             #Mensagem de sucesso (pode ser uma nova página)
             self.wfile.write(logou.encode("utf-8"))
 
-        #Cadastro de filme
+        # #Cadastro de filme
+        # elif self.path == '/send_filme':
+            
+        #     #Ler o tamanho do corpo da requisição
+        #     content_length = int(self.headers['Content-length'])
+        #     #Ler o que veio
+        #     body = self.rfile.read(content_length).decode('utf-8')
+        #     #Pegar as informações do que veio
+        #     form_data = parse_qs(body)
+
+        #     #Extrair os dados do formulário
+        #     nome_filme = form_data.get('nome_filme', [""])[0].strip()
+        #     atores = form_data.get('atores', [""])[0].strip()
+        #     diretor = form_data.get('diretor', [""])[0].strip()
+        #     ano_lancamento = form_data.get('ano_lancamento', [""])[0].strip()
+        #     genero = form_data.get('genero', [""])[0].strip()
+        #     produtora = form_data.get('produtora', [""])[0].strip()
+        #     sinopse = form_data.get('sinopse', [""])[0].strip()
+            
+        #     #Puxar os dados dos jsons
+        #     filmes_mari = self.carregar_filmes()
+            
+        #     #Novo id único
+        #     max_id = max([f.get('id', 0) for f in filmes_mari]) if filmes_mari else 0
+        #     new_id = max_id + 1
+
+        #     #Criar o dicionário do filme
+        #     filme_mari = {
+        #         "id": new_id,
+        #         "nome": nome_filme,
+        #         "atores": atores,
+        #         "diretor": diretor,
+        #         "ano_lancamento": ano_lancamento,
+        #         "genero": genero,
+        #         "produtora": produtora,
+        #         "sinopse": sinopse
+        #     }
+
+        #     filmes_mari.append(filme_mari)
+            
+        #     #Transformar a lista em json
+        #     self.salvar_filme(filmes_mari)
+            
+        #     #Enviar resposta de sucesso
+        #     self.send_response(201) # 201 Created
+        #     self.send_header("Content-type", "application/json")
+        #     self.end_headers()
+        #     self.wfile.write(json.dumps(filme_mari).encode("utf-8"))
+
+
+        #Cadastro de filme no banco
         elif self.path == '/send_filme':
             
             #Ler o tamanho do corpo da requisição
@@ -287,43 +407,20 @@ class MyHandle(BaseHTTPRequestHandler):
             form_data = parse_qs(body)
 
             #Extrair os dados do formulário
-            nome_filme = form_data.get('nome_filme', [""])[0].strip()
-            atores = form_data.get('atores', [""])[0].strip()
-            diretor = form_data.get('diretor', [""])[0].strip()
-            ano_lancamento = form_data.get('ano_lancamento', [""])[0].strip()
-            genero = form_data.get('genero', [""])[0].strip()
-            produtora = form_data.get('produtora', [""])[0].strip()
-            sinopse = form_data.get('sinopse', [""])[0].strip()
-            
-            #Puxar os dados dos jsons
-            filmes_mari = self.carregar_filmes()
-            
-            #Novo id único
-            max_id = max([f.get('id', 0) for f in filmes_mari]) if filmes_mari else 0
-            new_id = max_id + 1
+            titulo = form_data.get('titulo', [""])[0].strip()
+            orcamento = form_data.get('orcamento', [""])[0].strip()
+            tempo_duracao = form_data.get('tempo_duracao', [""])[0].strip()
+            ano = form_data.get('ano', [""])[0].strip()
+            poster = form_data.get('poster', [""])[0].strip()
 
-            #Criar o dicionário do filme
-            filme_mari = {
-                "id": new_id,
-                "nome": nome_filme,
-                "atores": atores,
-                "diretor": diretor,
-                "ano_lancamento": ano_lancamento,
-                "genero": genero,
-                "produtora": produtora,
-                "sinopse": sinopse
-            }
+            resp = self.insertFIlminhos(titulo, orcamento, tempo_duracao, ano, poster)
 
-            filmes_mari.append(filme_mari)
-            
-            #Transformar a lista em json
-            self.salvar_filme(filmes_mari)
-            
             #Enviar resposta de sucesso
             self.send_response(201) # 201 Created
             self.send_header("Content-type", "application/json")
             self.end_headers()
-            self.wfile.write(json.dumps(filme_mari).encode("utf-8"))
+            self.wfile.write(str(resp).encode("utf-8"))
+            
 
         #Padrão que sempre tem
         else:

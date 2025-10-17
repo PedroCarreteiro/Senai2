@@ -1,10 +1,18 @@
 [
     {
         "id": 1,
-        "titulo": "Magu, o Retorno",
-        "orcamento": 40000000.0,
-        "tempoDuracao": 150,
+        "titulo": "F1",
+        "orcamento": 1000000000000000.0,
+        "tempoDuracao": 123,
         "ano": 2025,
-        "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRqrhjmE6FuJ5r5Ad7bRm4UsnU_sNyDZVREg&s"
+        "poster": "https://tse2.mm.bing.net/th/id/OIP.yrTYgG6UCawpNtuupZwPRAHaK-?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
+    },
+    {
+        "id": 2,
+        "titulo": "F2",
+        "orcamento": 1000000000000000.0,
+        "tempoDuracao": 123,
+        "ano": 2025,
+        "poster": "https://tse2.mm.bing.net/th/id/OIP.yrTYgG6UCawpNtuupZwPRAHaK-?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
     }
 ]
