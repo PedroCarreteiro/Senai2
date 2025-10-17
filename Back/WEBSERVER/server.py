@@ -118,50 +118,68 @@ class MyHandle(BaseHTTPRequestHandler):
 
     def insertFIlminhos(self, titulo, orcamento, tempo_duracao, ano, poster):
         cursor = mydb.cursor()
+        response_data = {}
+        http_status = 500 # Default para erro
 
         try:
+            # 1. VERIFICAR SE O FILME JÁ EXISTE
             cursor.execute("SELECT id FROM filmes.filme WHERE titulo = %s", (titulo,))
             filme_existente = cursor.fetchone()
 
             if filme_existente:
-                print(f"Filme '{titulo}' já cadastrado com ID: {filme_existente[0]}")
-                self.send_response(400)
-                return {"mensagem": "Filme já cadastrado.", "id": filme_existente[0]}
-
-            sql_insert = (
-                "INSERT INTO filmes.filme (titulo, orcamento, tempo_duracao, ano, poster) "
-                "VALUES (%s, %s, %s, %s, %s)"
-            )
-            valores = (titulo, orcamento, tempo_duracao, ano, poster)
-            
-            cursor.execute(sql_insert, valores)
-            
-            cursor.execute("SELECT id FROM filmes.filme WHERE titulo = %s", (titulo,))
-            id_inserido = cursor.fetchone()
-
-            if id_inserido:
-                id_filme = id_inserido[0]
-                cursor.execute("SELECT * FROM filmes.filme WHERE id = %s", (id_filme,))
-                resultado = cursor.fetchall()
-                
-                mydb.commit()
-                self.send_response(201)
-                print(f"Filme inserido com sucesso: {resultado}")
-                return resultado
+                http_status = 400 # Bad Request ou 409 Conflict
+                response_data = {"mensagem": "Filme já cadastrado.", "id": filme_existente[0]}
             else:
-                mydb.commit() 
-                self.send_response(500)
-                return {"erro": "Erro ao recuperar o ID após a inserção."}
+                # 2. INSERIR O NOVO FILME
+                sql_insert = (
+                    "INSERT INTO filmes.filme (titulo, orcamento, tempo_duracao, ano, poster) "
+                    "VALUES (%s, %s, %s, %s, %s)"
+                )
+                valores = (titulo, orcamento, tempo_duracao, ano, poster)
+                cursor.execute(sql_insert, valores)
+                
+                # 3. OBTER O FILME INSERIDO
+                # Obtém o ID. Dependendo do DB, pode ser cursor.lastrowid
+                cursor.execute("SELECT id FROM filmes.filme WHERE titulo = %s", (titulo,))
+                id_inserido = cursor.fetchone()[0]
 
+                cursor.execute("SELECT * FROM filmes.filme WHERE id = %s", (id_inserido, ))
+                resultado_db = cursor.fetchall()
+                
+                # Formata o resultado para JSON (precisa do nome das colunas)
+                # Assumindo que resultado_db = [(id, titulo, orcamento, tempo_duracao, ano, poster)]
+                filme_inserido = {
+                    "id": resultado_db[0][0],
+                    "titulo": resultado_db[0][1],
+                    "orcamento": resultado_db[0][2],
+                    "tempo_duracao": resultado_db[0][3],
+                    "ano": resultado_db[0][4],
+                    "poster": resultado_db[0][5],
+                }
+                
+                response_data = [filme_inserido] # Retorna como uma lista para manter a consistência
+                http_status = 201 # Created
+                mydb.commit() # Confirma as alterações
 
         except Exception as e:
             mydb.rollback()
             print(f"Erro ao inserir filme: {e}")
-            self.send_response(500)
-            return {"erro": str(e)}
+            response_data = {"erro": f"Erro interno do servidor: {str(e)}"}
+            http_status = 500
 
         finally:
             cursor.close()
+            
+        # ENVIAR RESPOSTA HTTP (Comum em SimpleHTTPRequestHandler)
+        self.send_response(http_status)
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
+        
+        # Converte o Python Dict/List para uma string JSON e codifica para bytes
+        response_content = json.dumps(response_data).encode('utf-8')
+        self.wfile.write(response_content)
+        # Não precisa mais de 'return resultado' se você estiver usando self.wfile.write()
+        # para enviar a resposta HTTP.
         
     # EXEMPLO DA AULA
     # #Insert de filme no banco
@@ -399,27 +417,67 @@ class MyHandle(BaseHTTPRequestHandler):
         #Cadastro de filme no banco
         elif self.path == '/send_filme':
             
-            #Ler o tamanho do corpo da requisição
-            content_length = int(self.headers['Content-length'])
-            #Ler o que veio
-            body = self.rfile.read(content_length).decode('utf-8')
-            #Pegar as informações do que veio
-            form_data = parse_qs(body)
+            ##Padrão da aula
+            # #Ler o tamanho do corpo da requisição
+            # content_length = int(self.headers['Content-length'])
+            # #Ler o que veio
+            # body = self.rfile.read(content_length).decode('utf-8')
+            # #Pegar as informações do que veio
+            # form_data = parse_qs(body)
 
-            #Extrair os dados do formulário
-            titulo = form_data.get('titulo', [""])[0].strip()
-            orcamento = form_data.get('orcamento', [""])[0].strip()
-            tempo_duracao = form_data.get('tempo_duracao', [""])[0].strip()
-            ano = form_data.get('ano', [""])[0].strip()
-            poster = form_data.get('poster', [""])[0].strip()
+            # #Extrair os dados do formulário
+            # titulo = form_data.get('titulo', [""])[0].strip()
+            # orcamento = form_data.get('orcamento', [""])[0].strip()
+            # tempo_duracao = form_data.get('tempo_duracao', [""])[0].strip()
+            # ano = form_data.get('ano', [""])[0].strip()
+            # poster = form_data.get('poster', [""])[0].strip()
 
-            resp = self.insertFIlminhos(titulo, orcamento, tempo_duracao, ano, poster)
+            # resp = self.insertFIlminhos(titulo, orcamento, tempo_duracao, ano, poster)
 
-            #Enviar resposta de sucesso
-            self.send_response(201) # 201 Created
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
-            self.wfile.write(str(resp).encode("utf-8"))
+            # #Enviar resposta de sucesso
+            # self.send_response(201) # 201 Created
+            # self.send_header("Content-type", "application/json")
+            # self.end_headers()
+            # self.wfile.write(str(resp).encode("utf-8"))
+        
+            content_length = int(self.headers.get('Content-Length', 0))
+            
+            try:
+                body = self.rfile.read(content_length).decode('utf-8')
+                content_type = self.headers.get('Content-Type', '')
+                #Ler o corpo como json
+                if 'application/json' in content_type:
+                    data = json.loads(body)
+                #Se for um form padrão
+                else:
+                    form_data = parse_qs(body)
+                    data = {
+                        'titulo': form_data.get('titulo', [""])[0].strip(),
+                        'orcamento': form_data.get('orcamento', [""])[0].strip(),
+                        'tempo_duracao': form_data.get('tempo_duracao', [""])[0].strip(),
+                        'ano': form_data.get('ano', [""])[0].strip(),
+                        'poster': form_data.get('poster', [""])[0].strip(),
+                    }
+
+                #Extrair dados
+                titulo = data.get('titulo')
+                orcamento = data.get('orcamento')
+                tempo_duracao = data.get('tempo_duracao')
+                ano = data.get('ano')
+                poster = data.get('poster')
+                
+                #Insert pela função
+                self.insertFIlminhos(titulo, orcamento, tempo_duracao, ano, poster)
+                return 
+                
+            #Exceções
+            except json.JSONDecodeError:
+                self.send_error(400, "JSON Inválido no corpo da requisição.")
+                return
+            except Exception as e:
+                print(f"Erro ao processar POST /send_filme: {e}")
+                self.send_error(500, f"Erro interno: {e}")
+                return
             
 
         #Padrão que sempre tem

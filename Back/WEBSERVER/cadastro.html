@@ -11,7 +11,7 @@
             <!--Título da página-->
             <h1>Cadastro de filmes</h1>
             <!--Formulário de cadastro de filmes com opção de cadastro-->
-            <form action = "send_filme" method="post">
+            <form id="formCadastro">
                 <label>Título do filme</label>
                 <input placeholder="Título do filme" name="titulo"/>
                 <label>Orçamento</label>
@@ -23,8 +23,9 @@
                 <label>Poster</label>
                 <input placeholder="Poster" name="poster"/>
 
-                <button>Cadastrar</button>
+                <button type="submit">Cadastrar</button>
             </form>
         </main>
+        <script src="script.js"></script> 
     </body>
 </html>

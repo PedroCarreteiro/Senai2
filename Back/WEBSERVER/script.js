@@ -172,3 +172,106 @@ fetch('http://localhost:8000/listar_filmes').then((res) => {
         `
     });
 });
+
+
+//Post de filme
+async function enviarCadastro(event) {
+    //Previnir o envio de form padrão
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const novoFilme = {};
+
+    //Criar JSON
+    for (const [key, value] of formData.entries()) {
+        novoFilme[key] = value.trim();
+    }
+
+    //Requisição do server
+    const response = await fetch('http://localhost:8000/send_filme', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(novoFilme)
+    });
+
+    const dadosResposta = await response.json();
+
+    //Se o sucesso foi realizado com sucesso
+    if (response.status === 201 || response.status === 202) {
+        alert(`Cadastro realizado, filme: ${novoFilme.titulo}`);
+        
+        //Passar os dados pelo LocalStorage
+        localStorage.setItem('filmeCadastrado', JSON.stringify(dadosResposta));
+        
+        window.location.href = 'sucesso.html'; 
+        
+    } else if (response.status === 400) {
+        //Filme já cadastrado
+        const mensagemErro = dadosResposta.mensagem || "Filme já cadastrado.";
+        alert(`Cadastro recusado: ${mensagemErro}`);
+        
+    } else {
+        //Erros além do de já cadastrado
+        const mensagemErro = dadosResposta.erro || "Erro desconhecido no servidor.";
+        alert(`Falha para cadastrar: ${mensagemErro}`);
+    }
+}
+
+//
+document.addEventListener('DOMContentLoaded', () => {
+    const formCadastro = document.getElementById('formCadastro'); 
+    if (formCadastro) {
+        formCadastro.addEventListener('submit', enviarCadastro);
+    }
+
+    exibirDadosSucesso();
+});
+
+
+//Exibir os dados do film na página de sucesso
+function exibirDadosSucesso() {
+    //Pegar dados armazenados no localStorage
+    const dadosFilmeJSON = localStorage.getItem('filmeCadastrado');
+
+    //Onde vai mostrar os dados
+    const containerSucesso = document.getElementById('dados-sucesso-container');
+
+    //Return vazio se tiver algum problema com os dados
+    if (!containerSucesso || !dadosFilmeJSON) {
+        return;
+    }
+
+    try {
+        //Mostrar os dados
+        const dadosFilmeArray = JSON.parse(dadosFilmeJSON);
+        const filme = dadosFilmeArray[0]; 
+
+        //Tem que ter os dados do filme para mostrar os dados
+        if (!filme) {
+            containerSucesso.innerHTML = '<p>Erro: Dados do filme não encontrados.</p>';
+            return;
+        }
+
+       //Colocar dados no HTML
+        containerSucesso.innerHTML = `
+            <p><strong>ID:</strong> ${filme.id}</p>
+            <p><strong>Título:</strong> ${filme.titulo}</p>
+            <p><strong>Orçamento:</strong> ${filme.orcamento}</p>
+            <p><strong>Duração (Minutos):</strong> ${filme.tempo_duracao}</p>
+            <p><strong>Ano de Lançamento:</strong> ${filme.ano}</p>
+            <p><strong>Poster:</strong> <img src="${filme.poster}" alt="Poster" style="max-width: 150px;"></p>
+            <button onclick="window.location.href='listar_filmes.html'">Ver Lista de Filmes</button>
+        `;
+
+        //Limpar localStorage
+        localStorage.removeItem('filmeCadastrado');
+
+    //Erro de processamento de dados
+    } catch (e) {
+        containerSucesso.innerHTML = '<p>Erro ao processar dados de sucesso.</p>';
+        console.error("Erro ao processar dados em sucesso.html:", e);
+    }
+}
